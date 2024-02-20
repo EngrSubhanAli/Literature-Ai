@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm/Core/Components/app_button.dart';
+import 'package:mvvm/Core/Components/custom_appbar.dart';
 import 'package:mvvm/Core/Components/edit_password.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
+import 'package:mvvm/Core/constant/constan.dart';
+import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/view/profile_section/profile_screen.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -21,117 +26,101 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController confirmpassController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          child: Container(
-            height: 1.sh,
-            width: 1.sw,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage(
-                    background), // Replace with your image asset path
-                fit: BoxFit.cover,
+    final homeprovider = Provider.of<HomeProvider>(context, listen: true);
+    return homeprovider.condition == true
+        ? SafeArea(
+            child: Scaffold(
+              resizeToAvoidBottomInset: false,
+              body: SingleChildScrollView(
+                child: Container(
+                  height: 1.sh,
+                  width: 1.sw,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                          background), // Replace with your image asset path
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      CusotmAppBar(
+                        color: Colors.transparent,
+                        from: AppConstants.fromeidt,
+                      ),
+                      VerticalSizedBox(vertical: 20.sp),
+                      Row(
+                        children: [
+                          HorizontalSizedBox(horizontalSpace: 15.sp),
+                          CustomText(
+                            text: "Edit Profile",
+                            fontSize: 27.sp,
+                            color: blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ],
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            profilepic,
+                            width: 110.w,
+                            height: 110.h,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              VerticalSizedBox(vertical: 12.h),
+                              CustomText(
+                                text: "Jason Born",
+                                fontSize: 23.sp,
+                                color: blackColor,
+                                fontWeight: FontWeight.w600,
+                              ),
+                              CustomText(
+                                text: "jasonborn@yourdomain.com",
+                                fontSize: 16.sp,
+                                color: blackColor.withOpacity(0.6),
+                                fontWeight: FontWeight.w400,
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                      VerticalSizedBox(vertical: 20.h),
+                      // textfields
+                      EditProfileCustomTextField(
+                        controller: nameController,
+                        scrollarea: 4,
+                        hintText: "Lolla Smith",
+                        prefixIcon: Icons.person,
+                      ),
+                      VerticalSizedBox(vertical: 30.h),
+                      EditProfileCustomTextField(
+                        controller: nameController,
+                        scrollarea: 4,
+                        hintText: "lolla_smith@example.com",
+                        prefixIcon: Icons.email,
+                      ),
+                      VerticalSizedBox(vertical: 30.h),
+                      EditPassowrdWidget(
+                        controller: passController,
+                      ),
+                      VerticalSizedBox(vertical: 30.h),
+                      EditPassowrdWidget(
+                        controller: confirmpassController,
+                      ),
+                      VerticalSizedBox(vertical: 50.h),
+                      const CustomGradientButton(buttonText: "Save")
+                    ],
+                  ),
+                ),
               ),
             ),
-            child: Column(
-              children: [
-                SizedBox(height: 30.h),
-                Row(
-                  children: [
-                    HorizontalSizedBox(horizontalSpace: 15.w),
-                    Icon(
-                      Icons.menu,
-                      size: 25.sp,
-                    ),
-                    HorizontalSizedBox(horizontalSpace: 30.sp),
-                    Image.asset(
-                      logo,
-                      height: 35.h,
-                      width: 55.w,
-                    ),
-                    HorizontalSizedBox(horizontalSpace: 10.w),
-                    CustomText(
-                      text: "LITERATURE.AI",
-                      fontSize: 17.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 20.sp),
-                Row(
-                  children: [
-                    HorizontalSizedBox(horizontalSpace: 15.sp),
-                    CustomText(
-                      text: "Edit Profile",
-                      fontSize: 27.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 10.h),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Image.asset(
-                      profilepic,
-                      width: 110.w,
-                      height: 110.h,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        VerticalSizedBox(vertical: 12.h),
-                        CustomText(
-                          text: "Jason Born",
-                          fontSize: 23.sp,
-                          color: blackColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        CustomText(
-                          text: "jasonborn@yourdomain.com",
-                          fontSize: 16.sp,
-                          color: blackColor.withOpacity(0.6),
-                          fontWeight: FontWeight.w400,
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                // textfields
-                EditProfileCustomTextField(
-                  controller: nameController,
-                  scrollarea: 4,
-                  hintText: "Lolla Smith",
-                  prefixIcon: Icons.person,
-                ),
-                VerticalSizedBox(vertical: 30.h),
-                EditProfileCustomTextField(
-                  controller: nameController,
-                  scrollarea: 4,
-                  hintText: "lolla_smith@example.com",
-                  prefixIcon: Icons.email,
-                ),
-                VerticalSizedBox(vertical: 30.h),
-                EditPassowrdWidget(
-                  controller: passController,
-                ),
-                VerticalSizedBox(vertical: 30.h),
-                EditPassowrdWidget(
-                  controller: confirmpassController,
-                ),
-                VerticalSizedBox(vertical: 50.h),
-                const CustomGradientButton(buttonText: "Save")
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+          )
+        : const ProfileScreen();
   }
 }
 // EditProfileCustomTextfield

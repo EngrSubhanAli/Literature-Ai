@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mvvm/Core/Components/custom_appbar.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
+import 'package:mvvm/Core/constant/constan.dart';
 import 'package:mvvm/models/post_data_model.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/home_screen/home_provider.dart';
@@ -31,100 +33,72 @@ class _HomeScreenState extends State<HomeScreen> {
     return homeprovider.condition == true
         ? SafeArea(
             child: Scaffold(
-                appBar: AppBar(
-                  leading: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        homeprovider.toggleCondition(false);
-                      });
-                    },
+                body: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: SizedBox(
+                    height: posts.length * 0.41.sh,
+                    width: 1.sw,
                     child: Column(
                       children: [
-                        VerticalSizedBox(vertical: 20.h),
-                        Icon(
-                          Icons.menu,
-                          size: 25.sp,
+                        SizedBox(height: 70.h),
+                        // status
+                        const Padding(
+                          padding: EdgeInsets.only(left: 12.0),
+                          child: StatusSectionHomeScreen(),
                         ),
+                        VerticalSizedBox(vertical: 10.h),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Padding(
+                            padding: EdgeInsets.only(left: 20.sp),
+                            child: CustomText(
+                              text: "Stories",
+                              fontSize: 27.sp,
+                              color: blackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        VerticalSizedBox(vertical: 10.h),
+                        // Stories
+                        const StoriesSectionHomeScreen(),
                       ],
                     ),
                   ),
-                  title: Column(
-                    children: [
-                      VerticalSizedBox(vertical: 10.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          HorizontalSizedBox(horizontalSpace: 25.w),
-                          Image.asset(
-                            logo,
-                            height: 35.h,
-                            width: 55.w,
+                ),
+                Positioned(
+                  bottom: 110.h,
+                  right: 25.w,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.poststory);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color:
+                                Colors.black.withOpacity(0.3), // Shadow color
+                            spreadRadius: 0, // Spread radius
+                            blurRadius: 20, // Blur radius
+                            offset: Offset(
+                                12.sp, 13.sp), // Offset in x and y directions
                           ),
-                          HorizontalSizedBox(horizontalSpace: 5.w),
-                          CustomText(
-                            text: "LITERATURE.AI",
-                            fontSize: 17.sp,
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          const Spacer(),
                         ],
                       ),
-                    ],
+                      child: Image.asset(
+                        addbutton,
+                        height: 70.h,
+                        width: 70.w,
+                      ),
+                    ),
                   ),
                 ),
-                body: Stack(
-                  children: [
-                    SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: SizedBox(
-                        height: 2.8.sh,
-                        width: 1.sw,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 15.h),
-                            VerticalSizedBox(vertical: 15.h),
-                            // status
-                            const Padding(
-                              padding: EdgeInsets.only(left: 12.0),
-                              child: StatusSectionHomeScreen(),
-                            ),
-                            VerticalSizedBox(vertical: 10.h),
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 20.sp),
-                                child: CustomText(
-                                  text: "Stories",
-                                  fontSize: 27.sp,
-                                  color: blackColor,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            VerticalSizedBox(vertical: 10.h),
-                            // Stories
-                            const StoriesSectionHomeScreen(),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 40.h,
-                      right: -15.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, RoutesName.poststory);
-                        },
-                        child: Image.asset(
-                          addbutton,
-                          height: 100.h,
-                          width: 100.w,
-                        ),
-                      ),
-                    ),
-                  ],
-                )),
+                CusotmAppBar(color: whiteColor, from: AppConstants.fromhome),
+              ],
+            )),
           )
         : const ProfileScreen();
   }
@@ -462,7 +436,11 @@ class ReportPostButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      elevation: 1,
+      color: whiteColor,
+      surfaceTintColor: whiteColor,
+      elevation: 5,
+      position: PopupMenuPosition.under,
+      offset: Offset(-20.sp, -12.sp),
       padding: EdgeInsets.zero,
       icon: GestureDetector(
         child: Icon(
@@ -495,19 +473,19 @@ class ReportPostButton extends StatelessWidget {
         ),
         const PopupMenuDivider(),
         PopupMenuItem<String>(
-          value: 'Block',
+          value: 'Report',
           height: 25.h,
           child: Row(
             children: [
               const HorizontalSizedBox(horizontalSpace: 7),
               Icon(
-                Icons.block,
+                Icons.report,
                 size: 12.sp,
                 color: blackColor,
               ),
               const HorizontalSizedBox(horizontalSpace: 10),
               const CustomText(
-                text: "Block User",
+                text: "Report User",
                 fontSize: 12,
                 color: blackColor,
                 fontWeight: FontWeight.w300,

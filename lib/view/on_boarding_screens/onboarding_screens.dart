@@ -10,7 +10,6 @@ import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
-import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_screen.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -150,7 +149,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
               InkWell(
                 onTap: () {
                   // Get.to(const SignUpScreen());
-                      _markOnboardingShown();
+                  _markOnboardingShown();
                   Get.offAll(const SignInScreen());
                 },
                 child: CustomText(

@@ -41,6 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Container(
           // height: 1.sh,
           decoration: BoxDecoration(
@@ -63,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     height: 55.h,
                   ),
                 ),
-                SizedBox(height: 35.h),
+                SizedBox(height: 20.h),
                 CustomText(
                   text: "Create your account",
                   fontSize: 24.sp,
@@ -173,7 +174,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               });
                             }
                           },
-                    child:registerProvider.isLoading?const CircularProgressIndicator(): const CustomGradientButton(buttonText: "Continue")),
+                    child: registerProvider.isLoading
+                        ? const CircularProgressIndicator()
+                        : const CustomGradientButton(buttonText: "Continue")),
                 VerticalSizedBox(vertical: 30.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -235,16 +238,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Platform.isAndroid == platform
                         ? Image.asset(
                             google,
-                            width: 140.w,
-                            height: 80.h,
+                            width: 120.w,
+                            height: 70.h,
                           )
                         : Image.asset(
                             apple,
-                            width: 140.w,
-                            height: 80.h,
+                            width: 120.w,
+                            height: 70.h,
                           ),
                   ],
-                )
+                ),
+                VerticalSizedBox(vertical: 30.h),
               ],
             ),
           ),

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm/Core/constant/colors.dart';
+
 typedef FormValidator = String? Function(String?);
+
 // ignore: must_be_immutable
 class TextFieldContainer extends StatefulWidget {
   final String title;
@@ -10,18 +12,17 @@ class TextFieldContainer extends StatefulWidget {
   bool obscure = false;
   final TextEditingController textController;
   final IconData prefixIcon;
-final FormValidator? validator;
+  final FormValidator? validator;
 
-  TextFieldContainer({
-    super.key,
-    required this.title,
-    required this.placeholder,
-    required this.textController,
-    required this.suffixicon,
-    required this.prefixIcon,
-    required this.obscure,
-    required this.validator
-  });
+  TextFieldContainer(
+      {super.key,
+      required this.title,
+      required this.placeholder,
+      required this.textController,
+      required this.suffixicon,
+      required this.prefixIcon,
+      required this.obscure,
+      required this.validator});
 
   @override
   State<TextFieldContainer> createState() => _TextFieldContainerState();
@@ -38,7 +39,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Container(
         width: 1.sw,
         decoration: BoxDecoration(
@@ -51,10 +52,10 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
         ),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          // mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom:8),
+              padding: const EdgeInsets.only(bottom: 8),
               child: Icon(
                 widget.prefixIcon,
                 color: lightGrey,
@@ -68,7 +69,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(height: 5.h),
+                  SizedBox(height: 10.h),
                   Text(
                     widget.title,
                     style: TextStyle(
@@ -78,11 +79,10 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
                   ),
                   // const SizedBox(height: 8),
                   TextFormField(
-                    validator:widget.validator,
+                    validator: widget.validator,
                     style: TextStyle(
                       color: baseColor,
                       fontWeight: FontWeight.w500,
-                      
                       fontSize: 13.sp,
                     ),
                     controller: widget.textController,

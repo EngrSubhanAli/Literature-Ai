@@ -24,20 +24,19 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  final formKey=GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   bool? platform;
   @override
   void initState() {
     platform = Platform.isAndroid;
-    final loginProvider =Provider.of<LogInViewModel>(context,listen: false);
+    final loginProvider = Provider.of<LogInViewModel>(context, listen: false);
     loginProvider.disposeLoginControllers();
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-        final loginProvider =Provider.of<LogInViewModel>(context);
+    final loginProvider = Provider.of<LogInViewModel>(context);
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -86,8 +85,8 @@ class _SignInScreenState extends State<SignInScreen> {
                     title: "Email",
                     validator: (value) {
                       if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                  .hasMatch(value.toString()) ==
-              false) {
+                              .hasMatch(value.toString()) ==
+                          false) {
                         return 'Please enter a valid email address';
                       }
                       return null;
@@ -101,11 +100,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   VerticalSizedBox(vertical: 10.h),
                   TextFieldContainer(
                     title: "Password",
-                 validator: (value) {
+                    validator: (value) {
                       if (value == null || value.trim().length < 8) {
                         return 'Password must contain 8 characters';
                       }
-              
+
                       return null;
                     },
                     placeholder: "Create Password",
@@ -138,35 +137,36 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   VerticalSizedBox(vertical: 20.h),
                   GestureDetector(
-                    onTap:loginProvider.isLoading?(){}: () async {
+                    onTap: loginProvider.isLoading
+                        ? () {}
+                        : () async {
+                            if (formKey.currentState!.validate()) {
+                              formKey.currentState!.save();
+                              await loginProvider.loginUser().then((value) {
+                                if (value != "Sucess") {
+                                  value = value.replaceAll(
+                                      "[firebase_auth/invalid-credential] ",
+                                      "");
 
-                      if (formKey.currentState!.validate()) {
-                                formKey.currentState!.save();
-                                await loginProvider.loginUser().then((value) {
-                                  if (value != "Sucess") {
-                                    value = value.replaceAll(
-                                        "[firebase_auth/invalid-credential] ",
-                                        "");
-
-                                    Fluttertoast.showToast(
-                                      msg: value,
-                                      // toastLength: Toast
-                                      //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
-                                      gravity: ToastGravity
-                                          .BOTTOM, // Top, Center, Bottom
-                                      timeInSecForIosWeb:
-                                          1, // Time duration for iOS and web
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: 16.0,
-                                    );
-                                  }
-                                });
-                      }
-
-
-                    },
-                    child:loginProvider.isLoading?const CircularProgressIndicator(): const CustomGradientButton(buttonText: "Continue"),
+                                  Fluttertoast.showToast(
+                                    msg: value,
+                                    // toastLength: Toast
+                                    //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
+                                    gravity: ToastGravity
+                                        .BOTTOM, // Top, Center, Bottom
+                                    timeInSecForIosWeb:
+                                        1, // Time duration for iOS and web
+                                    backgroundColor: Colors.red,
+                                    textColor: Colors.white,
+                                    fontSize: 16.0,
+                                  );
+                                }
+                              });
+                            }
+                          },
+                    child: loginProvider.isLoading
+                        ? const CircularProgressIndicator()
+                        : const CustomGradientButton(buttonText: "Continue"),
                   ),
                   VerticalSizedBox(vertical: 30.h),
                   Row(
@@ -181,7 +181,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, RoutesName.signUp);
-              
+
                           // Get.to(const SignInScreen());
                         },
                         child: CustomText(
@@ -229,13 +229,13 @@ class _SignInScreenState extends State<SignInScreen> {
                       Platform.isAndroid == platform
                           ? Image.asset(
                               google,
-                              width: 140.w,
-                              height: 80.h,
+                              width: 120.w,
+                              height: 70.h,
                             )
                           : Image.asset(
                               apple,
-                              width: 140.w,
-                              height: 80.h,
+                              width: 120.w,
+                              height: 70.h,
                             ),
                     ],
                   )

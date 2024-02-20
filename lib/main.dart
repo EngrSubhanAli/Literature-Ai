@@ -2,11 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Core/localiztion/messages/messages.dart';
 import 'Core/multiproviders_list/provider_list.dart';
@@ -14,21 +14,20 @@ import 'Core/multiproviders_list/provider_list.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
- 
+
   runApp(
     MultiProvider(
       providers: providers,
-      child: MyApp(
-
-      ),
+      child: MyApp(),
     ),
   );
 }
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  
-  MyApp({super.key,});
+  MyApp({
+    super.key,
+  });
   // Design width and height
   static const double _designWidth = 375;
   static const double _designHeight = 849;
@@ -47,15 +46,15 @@ class MyApp extends StatelessWidget {
               textDirection: TextDirection.ltr,
               locale: const Locale('en', 'US'),
               theme: ThemeData(
-                fontFamily: 'NunitoSans', // S
+                scaffoldBackgroundColor: whiteColor,
+                fontFamily: 'NunitoSans', //
                 primarySwatch: Colors.blue,
               ),
               // home: const SplashScreen(),
               // getPages: Routes
               //     .appRoutes(), // >>>>>>> use it if you want to use GetX<<<<<<<<<<<<
-              // home: MyStoriesScreen(),
-              initialRoute:
-            RoutesName.splash ,
+              // home: TopRatedStories(),
+              initialRoute: RoutesName.splash,
               onGenerateRoute: Routes.generateRoute,
             ),
           );

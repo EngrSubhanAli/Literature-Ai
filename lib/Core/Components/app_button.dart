@@ -65,7 +65,7 @@ class CustomGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 50.h,
-      width: 0.85.sw,
+      width: 0.90.sw,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(
             10.0), // Adjust the value for more or less rounding

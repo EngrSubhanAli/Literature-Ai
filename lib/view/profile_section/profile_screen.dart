@@ -5,6 +5,7 @@ import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
+import 'package:mvvm/Core/constant/constan.dart';
 import 'package:mvvm/services/firebase_db/firebase_db.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/bottom_navigation/bottom_navigation_bar.dart';
@@ -37,37 +38,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           child: Column(
             children: [
-              SizedBox(height: 30.h),
-              Row(
-                children: [
-                  HorizontalSizedBox(horizontalSpace: 15.sp),
-                  GestureDetector(
-                    onTap: () {
-                      currentIndex = 0;
-                      homeprovider.toggleCondition(true);
-                    },
-                    child: Image.asset(
-                      burger,
-                      height: 31.h,
-                      width: 31.w,
+              Container(
+                color: Colors.transparent,
+                height: 65.h,
+                child: Row(
+                  children: [
+                    HorizontalSizedBox(horizontalSpace: 15.sp),
+                    GestureDetector(
+                      onTap: () {
+                        if (homeprovider.setStateForHome ==
+                            AppConstants.fromhome) {
+                          currentIndex = 0;
+                          homeprovider.toggleCondition(true);
+                        }
+                        if (homeprovider.setStateForHome ==
+                            AppConstants.fromeidt) {
+                          currentIndex = 1;
+                          homeprovider.toggleCondition(true);
+                        }
+                        print(currentIndex);
+                      },
+                      child: Image.asset(
+                        burger,
+                        height: 31.h,
+                        width: 31.w,
+                      ),
                     ),
-                  ),
-                  HorizontalSizedBox(horizontalSpace: 30.sp),
-                  Image.asset(
-                    logo,
-                    height: 35.h,
-                    width: 55.w,
-                  ),
-                  HorizontalSizedBox(horizontalSpace: 10.w),
-                  CustomText(
-                    text: "LITERATURE.AI",
-                    fontSize: 17.sp,
-                    color: blackColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ],
+                    const Spacer(),
+                    Image.asset(
+                      logo,
+                      height: 35.h,
+                      width: 55.w,
+                    ),
+                    HorizontalSizedBox(horizontalSpace: 5.w),
+                    CustomText(
+                      text: "LITERATURE.AI",
+                      fontSize: 17.sp,
+                      color: blackColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    const Spacer(),
+                    HorizontalSizedBox(horizontalSpace: 42.w),
+                  ],
+                ),
               ),
-              VerticalSizedBox(vertical: 25.h),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Align(
@@ -281,9 +295,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     TextButton(
                                       onPressed: () async {
                                         // Perform action on cancel
-                                       await FirebaseDBService().logoutUser();
+                                        await FirebaseDBService().logoutUser();
                                         Get.offAll(const SignInScreen());
-
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(

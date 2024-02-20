@@ -5,6 +5,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 
 import 'package:mvvm/Core/Components/app_button.dart';
+import 'package:mvvm/Core/Components/custom_app_bar2.dart';
+import 'package:mvvm/Core/Components/custom_appbar.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
@@ -56,73 +58,36 @@ class _StoryDetailScreenState extends State<StoryDetailScreen> {
             ),
             child: Column(
               children: [
-                SizedBox(height: 30.h),
+                CusotmAppBar2(color: Colors.transparent, text: "Full Story"),
+                VerticalSizedBox(vertical: 20.sp),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    HorizontalSizedBox(horizontalSpace: 15.w),
-                    Icon(
-                      Icons.menu,
-                      size: 25.sp,
-                    ),
-                    HorizontalSizedBox(horizontalSpace: 30.sp),
-                    Image.asset(
-                      logo,
-                      height: 35.h,
-                      width: 55.w,
-                    ),
-                    HorizontalSizedBox(horizontalSpace: 10.w),
-                    CustomText(
-                      text: "LITERATURE.AI",
-                      fontSize: 17.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
+                    Container(
+                      width: 65.w,
+                      height: 100.h,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            bage2,
+                          ), // Replace with your image asset path
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomText(
+                            text: widget.rank.toString(),
+                            fontSize: 28.sp,
+                            color: whiteColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          VerticalSizedBox(vertical: 35.h),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-                VerticalSizedBox(vertical: 30.sp),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          Get.back();
-                        }),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                        ),
-                      ),
-                      Container(
-                        width: 65.w,
-                        height: 100.h,
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                              bage2,
-                            ), // Replace with your image asset path
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomText(
-                              text: widget.rank.toString(),
-                              fontSize: 28.sp,
-                              color: whiteColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                            VerticalSizedBox(vertical: 35.h),
-                          ],
-                        ),
-                      ),
-                      const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.transparent,
-                      ),
-                    ],
-                  ),
                 ),
                 const VerticalSizedBox(vertical: 10),
                 CustomText(

@@ -26,6 +26,7 @@ String addbutton = '$staticImagePath/add_button.png';
 //profile screen
 // icons
 String toprated = '$staticIconPath/toprated.png';
+String backarrow = '$staticIconPath/arrow.png';
 String generatestoriesprofile = '$staticIconPath/generate.png';
 String analyzeStoriesP = '$staticIconPath/analyzep.png';
 String recommendP = '$staticIconPath/recomendp.png';
