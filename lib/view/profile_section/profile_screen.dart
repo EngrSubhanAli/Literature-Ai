@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
+import 'package:mvvm/services/firebase_db/firebase_db.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/bottom_navigation/bottom_navigation_bar.dart';
 import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -276,10 +279,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
+                                      onPressed: () async {
                                         // Perform action on cancel
-                                        Navigator.pushNamed(
-                                            context, RoutesName.signIn);
+                                       await FirebaseDBService().logoutUser();
+                                        Get.offAll(const SignInScreen());
+
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
@@ -288,7 +292,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               BorderRadius.circular(20),
                                         ),
                                         padding: EdgeInsets.only(
-                                          left: 40.sp,
+                                          left: 30.sp,
                                           right: 40.sp,
                                           top: 6.sp,
                                           bottom: 6.sp,

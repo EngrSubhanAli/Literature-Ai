@@ -14,19 +14,21 @@ import 'Core/multiproviders_list/provider_list.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  final prefs = await SharedPreferences.getInstance();
-  final isSplash = prefs.getBool('splash') ?? true;
+ 
   runApp(
-    MyApp(
-      isSplash: isSplash,
+    MultiProvider(
+      providers: providers,
+      child: MyApp(
+
+      ),
     ),
   );
 }
 
 // ignore: must_be_immutable
 class MyApp extends StatelessWidget {
-  bool isSplash;
-  MyApp({super.key, required this.isSplash});
+  
+  MyApp({super.key,});
   // Design width and height
   static const double _designWidth = 375;
   static const double _designHeight = 849;
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
               //     .appRoutes(), // >>>>>>> use it if you want to use GetX<<<<<<<<<<<<
               // home: MyStoriesScreen(),
               initialRoute:
-                  isSplash == true ? RoutesName.splash : RoutesName.onboarding,
+            RoutesName.splash ,
               onGenerateRoute: Routes.generateRoute,
             ),
           );

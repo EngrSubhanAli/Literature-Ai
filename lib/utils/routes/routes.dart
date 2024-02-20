@@ -3,7 +3,6 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/SplashScreen/splash_screen.dart';
-import 'package:mvvm/view/admin_side_screens/auth/admin_sign_in_screen/sign_in_screen.dart';
 import 'package:mvvm/view/analyze_screen/analyze_screen.dart';
 import 'package:mvvm/view/bottom_navigation/bottom_navigation_bar.dart';
 import 'package:mvvm/view/forget_password/forget_password.dart';
@@ -15,6 +14,7 @@ import 'package:mvvm/view/post_story/post_story_screen.dart';
 import 'package:mvvm/view/profile_section/profile_screen.dart';
 import 'package:mvvm/view/recommend_screen/recommend_screen.dart';
 import 'package:mvvm/view/top_rated_screen/top_rated_screen.dart';
+import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_screen.dart';
 
 import 'package:mvvm/view/user_side_screens/auth/user_sign_up_screen/sign_up_screen.dart';
 import 'package:mvvm/view/user_side_screens/user_home_screen/home_screen.dart';

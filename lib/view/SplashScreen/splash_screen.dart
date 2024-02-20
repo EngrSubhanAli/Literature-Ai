@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
@@ -5,6 +7,7 @@ import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
+import 'package:mvvm/view/SplashScreen/splash_screen_view_model.dart';
 import 'package:mvvm/view/home_screen/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +22,9 @@ class _SplashScreenState extends State<SplashScreen> {
   bool _isOnboardingShown = false;
   Future<void> _checkOnboardingStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+
+
+
     setState(() {
       _isOnboardingShown = prefs.getBool('onboardingShown') ?? false;
     });
@@ -27,17 +33,23 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkOnboardingStatus();
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   Navigator.pushNamedAndRemoveUntil(
-    //     context,
-    //     RoutesName.onboarding,
-    //     (route) => false,
-    //   );
-    // });
-    //Getx Navigation call like that
-    // Future.delayed(const Duration(seconds: 3), () {
-    //  Get.offNamed(RoutesName.signUpGetx);}
+
+      _checkOnboardingStatus();
+
+    
+    
+
+
+
+   Timer(const Duration(seconds: 1), () async {
+      SplashScreenViewModel().isUserLoggedIn(_isOnboardingShown);
+    });
+
+
+     
+
+    
+
   }
 
   @override
@@ -84,17 +96,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               const Spacer(),
+                if(    _isOnboardingShown == false)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: InkWell(
                   onTap: () async {
-                    _isOnboardingShown == true
-                        ? Navigator.pushNamed(context, RoutesName.signIn)
-                        : Navigator.pushNamed(context, RoutesName.onboarding);
-                    final prefs = await SharedPreferences.getInstance();
-                    prefs.setBool('splash', false);
-                    print(_isOnboardingShown);
-                    print("this is splash screen");
+                
+                      Navigator.pushNamed(context, RoutesName.onboarding);
+                  
                   },
                   child: Image.asset(
                     tryliterature,

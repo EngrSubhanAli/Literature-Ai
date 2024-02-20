@@ -11,7 +11,8 @@ import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
-import 'package:mvvm/view/admin_side_screens/auth/admin_sign_in_screen/sign_in_screen.dart';
+import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_screen.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreens extends StatefulWidget {
@@ -136,7 +137,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                     if (_pageindex == 3) {
                       _markOnboardingShown();
                       print("make ths onboard off");
-                      Get.to(SignInScreen());
+                      Get.offAll(const SignInScreen());
                     }
                   });
                   // print(_pageController.toString());
@@ -145,11 +146,12 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                   buttonText: "Next",
                 ),
               ),
-              SizedBox(height: 20.h),
-              GestureDetector(
+              SizedBox(height: 30.h),
+              InkWell(
                 onTap: () {
                   // Get.to(const SignUpScreen());
-                  Navigator.pushNamed(context, RoutesName.signIn);
+                      _markOnboardingShown();
+                  Get.offAll(const SignInScreen());
                 },
                 child: CustomText(
                   text: "Skip",
