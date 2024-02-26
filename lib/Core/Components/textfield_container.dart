@@ -73,7 +73,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
                   Text(
                     widget.title,
                     style: TextStyle(
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
                       fontSize: 13.sp,
                     ),
                   ),

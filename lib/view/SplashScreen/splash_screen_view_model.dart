@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mvvm/services/firebase_db/firebase_db.dart';
 import 'package:mvvm/view/BlockedScreen/blocked_screen.dart';
 import 'package:mvvm/view/bottom_navigation/bottom_navigation_bar.dart';
+import 'package:mvvm/view/testChat.dart';
 import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_screen.dart';
 
 class SplashScreenViewModel extends ChangeNotifier {
@@ -20,6 +21,7 @@ class SplashScreenViewModel extends ChangeNotifier {
             else
               {
                 Get.offAll(
+                  // MessageChatScreen(),
                   AppMainScreen(),
                 )
               }

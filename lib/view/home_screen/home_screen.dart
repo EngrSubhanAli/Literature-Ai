@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm/Core/Components/custom_appbar.dart';
@@ -7,11 +8,13 @@ import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/Core/constant/constan.dart';
 import 'package:mvvm/models/post_data_model.dart';
+import 'package:mvvm/services/firebase_db/firebase_db.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
-import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:mvvm/view/home_screen/status_stories.dart';
 import 'package:mvvm/view/profile_section/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 bool profilescreen = false;
 
@@ -23,13 +26,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController confirmpassController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeProvider>(context, listen: true);
+    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
     return homeprovider.condition == true
         ? SafeArea(
             child: Scaffold(
@@ -37,9 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
-                  child: SizedBox(
-                    height: posts.length * 0.41.sh,
-                    width: 1.sw,
+                  child: Expanded(
+                    // height: posts.length * 0.41.sh,
+                    // width: 1.sw,
                     child: Column(
                       children: [
                         SizedBox(height: 70.h),
@@ -68,35 +67,22 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                Positioned(
-                  bottom: 110.h,
-                  right: 25.w,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, RoutesName.poststory);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color:
-                                Colors.black.withOpacity(0.3), // Shadow color
-                            spreadRadius: 0, // Spread radius
-                            blurRadius: 20, // Blur radius
-                            offset: Offset(
-                                12.sp, 13.sp), // Offset in x and y directions
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(
-                        addbutton,
-                        height: 70.h,
-                        width: 70.w,
+                
+                CusotmAppBar(color: whiteColor, from: AppConstants.fromhome),
+                  Positioned(
+                      bottom: 40.h,
+                      right: 15.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, RoutesName.poststory);
+                        },
+                        child: Image.asset(
+                          addbutton,
+                          height: 70.h,
+                          width: 70.w,
+                        ),
                       ),
                     ),
-                  ),
-                ),
-                CusotmAppBar(color: whiteColor, from: AppConstants.fromhome),
               ],
             )),
           )
@@ -115,15 +101,46 @@ class StatusSectionHomeScreen extends StatefulWidget {
 class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
   @override
   Widget build(BuildContext context) {
+    Timestamp twentyFourHoursAgo = Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 24)));
     return SizedBox(
       height: 100.h,
       width: 1.sw,
-      child: ListView.builder(
+      child: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("Stroies")
+            
+            .orderBy("createdAt", descending: true)
+            .where('createdAt', isGreaterThanOrEqualTo: twentyFourHoursAgo)
+            .snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return SizedBox(
+              height: 225.h,
+              width: 1.sw,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          if (snapshot.hasError) {
+            return const Center(
+              child: Text(
+                'Error loading data',
+              ),
+            );
+          }
+         
+         return ListView.builder(
         physics: const BouncingScrollPhysics(),
-        itemCount: posts.length,
+        itemCount:snapshot.data!.docs.length,
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
+        itemBuilder: (context, index)  {
+
+       
+
+
+
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.sp),
             child: Column(
@@ -132,11 +149,7 @@ class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => StatuStoriesScreen(
-                              imageUrl: posts[index].imageUrl,
-                              name: posts[index].name,
-                              time: posts[index].time,
-                              title: posts[index].title,
-                              description: posts[index].description,
+                            snapshot:snapshot.data!.docs[index] ,
                             )));
                   },
                   child: Container(
@@ -153,7 +166,7 @@ class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         CustomText(
-                          text: posts[index].title,
+                          text: snapshot.data!.docs[index]["storyTittle"],
                           fontSize: 5.sp,
                           color: blackColor,
                           fontWeight: FontWeight.bold,
@@ -162,7 +175,7 @@ class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
                           padding: const EdgeInsets.all(10.0),
                           child: Text(
                             textAlign: TextAlign.center,
-                            posts[index].description,
+                             snapshot.data!.docs[index]["storyBody"].toString(),
                             overflow: TextOverflow
                                 .ellipsis, // or TextOverflow.clip for clipping without ellipsis
                             maxLines: 4,
@@ -179,7 +192,7 @@ class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
                 ),
                 SizedBox(height: 7.h),
                 CustomText(
-                  text: posts[index].name,
+                  text:  snapshot.data!.docs[index]["username"],
                   fontSize: 10.sp,
                   color: blackColor,
                   fontWeight: FontWeight.w500,
@@ -188,83 +201,12 @@ class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
             ),
           );
         },
-      ),
-    );
+      );
+          
+         } 
+    ));
   }
 }
-
-// class StatusSectionHomeScreen extends StatelessWidget {
-//   const StatusSectionHomeScreen({
-//     super.key,
-//   });
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return SizedBox(
-//       height: 100.h,
-//       width: 1.sw,
-//       child: ListView.builder(
-//         physics: const BouncingScrollPhysics(),
-//         itemCount: posts.length,
-//         shrinkWrap: true,
-//         scrollDirection: Axis.horizontal,
-//         itemBuilder: (context, index) {
-//           return Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 5.sp),
-//             child: Column(
-//               children: [
-//                 Container(
-//                   height: 70.h,
-//                   width: 70.w,
-//                   decoration: BoxDecoration(
-//                     image: DecorationImage(
-//                       image: AssetImage(
-//                         storycontainer,
-//                       ), // Replace with your image asset path
-//                     ),
-//                   ),
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       CustomText(
-//                         text: posts[index].title,
-//                         fontSize: 5.sp,
-//                         color: blackColor,
-//                         fontWeight: FontWeight.bold,
-//                       ),
-//                       Padding(
-//                         padding: const EdgeInsets.all(10.0),
-//                         child: Text(
-//                           textAlign: TextAlign.center,
-//                           posts[index].description,
-//                           overflow: TextOverflow
-//                               .ellipsis, // or TextOverflow.clip for clipping without ellipsis
-//                           maxLines: 4,
-//                           style: TextStyle(
-//                             fontSize: 3.sp,
-//                             color: blackColor,
-//                             fontWeight: FontWeight.w300,
-//                           ),
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 SizedBox(height: 7.h),
-//                 CustomText(
-//                   text: posts[index].name,
-//                   fontSize: 10.sp,
-//                   color: blackColor,
-//                   fontWeight: FontWeight.w500,
-//                 )
-//               ],
-//             ),
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
 
 class StoriesSectionHomeScreen extends StatelessWidget {
   const StoriesSectionHomeScreen({
@@ -273,17 +215,44 @@ class StoriesSectionHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: posts.length,
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (context, index) {
-          return StoryItemWidget(
-            index: index,
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("Posts")
+          .orderBy("createdAt", descending: true)
+          .snapshots(),
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return SizedBox(
+            height: 225.h,
+            width: 1.sw,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
           );
-        },
-      ),
+        }
+        if (snapshot.hasError) {
+          return const Center(
+            child: Text(
+              'Error loading data',
+            ),
+          );
+        }
+    
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            List hiddenStories = snapshot.data!.docs[index]["hidenBy"];
+            return hiddenStories.contains(userData!.uid)
+                ? Container()
+                : StoryItemWidget(
+                    index: index,
+                    snapshot: snapshot.data!.docs[index],
+                  );
+          },
+        );
+      },
     );
   }
 }
@@ -291,9 +260,11 @@ class StoriesSectionHomeScreen extends StatelessWidget {
 // ignore: must_be_immutable
 class StoryItemWidget extends StatefulWidget {
   int index;
+  QueryDocumentSnapshot snapshot;
   StoryItemWidget({
     super.key,
     required this.index,
+    required this.snapshot,
   });
 
   @override
@@ -303,23 +274,14 @@ class StoryItemWidget extends StatefulWidget {
 class _StoryItemWidgetState extends State<StoryItemWidget> {
   bool likeActive = false;
   bool dislikeActive = false;
-
-  void toggleLike() {
-    setState(() {
-      likeActive = !likeActive;
-      dislikeActive = false;
-    });
-  }
-
-  void toggleDislike() {
-    setState(() {
-      dislikeActive = !dislikeActive;
-      likeActive = false;
-    });
-  }
+  List likedBy = [];
+  List dislikedBy = [];
 
   @override
   Widget build(BuildContext context) {
+    likedBy = widget.snapshot["likedBy"];
+    dislikedBy = widget.snapshot["dislikedBy"];
+    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(
         left: 15,
@@ -328,27 +290,43 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
         children: [
           Row(
             children: [
-              Image.asset(
-                posts[widget.index].imageUrl,
-                height: 40.h,
-                width: 40.w,
-              ),
+              if (widget.snapshot["picUrl"] == "")
+                Image.asset(
+                  profil2,
+                  height: 40.h,
+                  width: 40.w,
+                ),
+              if (widget.snapshot["picUrl"] != "")
+                Container(
+                  height: 40.h,
+                  width: 40.w,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: NetworkImage(
+                            widget.snapshot["picUrl"],
+                          ))),
+                ),
               HorizontalSizedBox(horizontalSpace: 10.w),
               CustomText(
-                text: posts[widget.index].name,
+                text: widget.snapshot["username"],
                 fontSize: 12.sp,
                 color: blackColor,
                 fontWeight: FontWeight.w600,
               ),
               HorizontalSizedBox(horizontalSpace: 25.w),
               CustomText(
-                text: posts[widget.index].time,
+                text: DateFormat('h:mm a  MMM d ,y ')
+                    .format(widget.snapshot["createdAt"].toDate()),
                 fontSize: 10.sp,
                 color: greyColor,
                 fontWeight: FontWeight.w400,
               ),
               const Spacer(),
-              const ReportPostButton(),
+              ReportPostButton(
+                snapshot: widget.snapshot,
+              ),
             ],
           ),
           VerticalSizedBox(vertical: 14.h),
@@ -356,7 +334,7 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
             children: [
               HorizontalSizedBox(horizontalSpace: 5.w),
               CustomText(
-                text: posts[widget.index].title,
+                text: widget.snapshot["storyTittle"],
                 fontSize: 14.sp,
                 color: blackColor,
                 fontWeight: FontWeight.w700,
@@ -369,7 +347,7 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: CustomText(
-                text: posts[widget.index].description,
+                text: widget.snapshot["storyBody"],
                 fontSize: 11.sp,
                 color: blackColor,
                 fontWeight: FontWeight.w300,
@@ -381,44 +359,55 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
           SizedBox(height: 14.h),
           Row(
             children: [
-              GestureDetector(
+              InkWell(
                 onTap: () {
-                  toggleLike(); // widget.selected = true;
+                  homeprovider
+                      .toggleLike(widget.snapshot); // widget.selected = true;
                 },
-                child: Image.asset(
-                  likeActive == false ? like : liked,
-                  height: 17.h,
-                  width: 17.w,
+                child: Row(
+                  children: [
+                    Image.asset(
+                      likedBy.contains(userData!.uid) == false ? like : liked,
+                      height: 17.h,
+                      width: 17.w,
+                    ),
+                    HorizontalSizedBox(horizontalSpace: 7.sp),
+                    CustomText(
+                      text: widget.snapshot["likedBy"].length.toString(),
+                      fontSize: 9.sp,
+                      color: blackColor,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ],
                 ),
-              ),
-              HorizontalSizedBox(horizontalSpace: 7.sp),
-              CustomText(
-                text: posts[widget.index].likes.toString(),
-                fontSize: 9.sp,
-                color: blackColor,
-                fontWeight: FontWeight.w300,
               ),
               HorizontalSizedBox(horizontalSpace: 15.sp),
-              GestureDetector(
+              InkWell(
                 onTap: () {
-                  toggleDislike();
+                  homeprovider.toggleDislike(widget.snapshot);
                 },
-                child: Transform.rotate(
-                  angle: 3.14,
-                  child: Image.asset(
-                    dislikeActive == false ? like : liked,
-                    height: 17.h,
-                    width: 17.w,
-                  ),
+                child: Row(
+                  children: [
+                    Transform.rotate(
+                      angle: 3.14,
+                      child: Image.asset(
+                        dislikedBy.contains(userData!.uid) == false
+                            ? like
+                            : liked,
+                        height: 17.h,
+                        width: 17.w,
+                      ),
+                    ),
+                    HorizontalSizedBox(horizontalSpace: 7.sp),
+                    CustomText(
+                      text: widget.snapshot["dislikedBy"].length.toString(),
+                      fontSize: 9.sp,
+                      color: blackColor,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ],
                 ),
-              ),
-              HorizontalSizedBox(horizontalSpace: 7.sp),
-              CustomText(
-                text: posts[widget.index].likes.toString(),
-                fontSize: 9.sp,
-                color: blackColor,
-                fontWeight: FontWeight.w300,
-              ),
+              )
             ],
           ),
           SizedBox(height: 20.h),
@@ -430,11 +419,20 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
 
 //
 //Report post
-class ReportPostButton extends StatelessWidget {
-  const ReportPostButton({super.key});
+
+// ignore: must_be_immutable
+class ReportPostButton extends StatefulWidget {
+  DocumentSnapshot snapshot;
+  ReportPostButton({super.key, required this.snapshot});
 
   @override
+  State<ReportPostButton> createState() => _ReportPostButtonState();
+}
+
+class _ReportPostButtonState extends State<ReportPostButton> {
+  @override
   Widget build(BuildContext context) {
+    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
     return PopupMenuButton<String>(
       color: whiteColor,
       surfaceTintColor: whiteColor,
@@ -442,14 +440,16 @@ class ReportPostButton extends StatelessWidget {
       position: PopupMenuPosition.under,
       offset: Offset(-20.sp, -12.sp),
       padding: EdgeInsets.zero,
-      icon: GestureDetector(
-        child: Icon(
-          Icons.more_vert,
-          size: 18.sp,
-        ),
+      icon: Icon(
+        Icons.more_vert,
+        size: 18.sp,
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
+            onTap: () async {
+               homeprovider.hideStory(widget.snapshot);
+
+            },
           height: 25.h,
           value: 'hide',
           child: Row(
@@ -473,6 +473,10 @@ class ReportPostButton extends StatelessWidget {
         ),
         const PopupMenuDivider(),
         PopupMenuItem<String>(
+       onTap: () {
+              homeprovider.reportUser(widget.snapshot);
+
+            },
           value: 'Report',
           height: 25.h,
           child: Row(

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mvvm/Core/Components/textfield_container.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 
 class EditPassowrdWidget extends StatefulWidget {
   final TextEditingController controller;
+  final FormValidator? validator;
+   final String hintText;
 
-  const EditPassowrdWidget({super.key, required this.controller});
+  const EditPassowrdWidget({super.key, required this.controller,required this.validator,required this.hintText});
 
   @override
   State<EditPassowrdWidget> createState() => _EditPassowrdWidgetState();
@@ -33,7 +36,7 @@ class _EditPassowrdWidgetState extends State<EditPassowrdWidget> {
                 // Limiting the text field to 4 lines
               },
               decoration: InputDecoration(
-                hintText: "* * * * *",
+                hintText: widget.hintText,
                 hintStyle: const TextStyle(color: blackColor),
                 prefixIcon: const Icon(
                   Icons.lock,

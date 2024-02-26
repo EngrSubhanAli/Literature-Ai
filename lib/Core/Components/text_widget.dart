@@ -23,7 +23,7 @@ class CustomText extends StatelessWidget {
       textAlign: textAlign,
       style: TextStyle(
         fontSize: fontSize,
-        letterSpacing: 0,
+        letterSpacing: -0.6,
         color: color,
         fontFamily: "NunitoSans",
         fontWeight: fontWeight,

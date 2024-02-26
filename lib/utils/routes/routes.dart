@@ -54,7 +54,7 @@ class Routes {
         ),
         GetPage(
           name: RoutesName.generatestory,
-          page: () => const GenerateStoryScreen(),
+          page: () =>  GenerateStoryScreen(),
           // transitionDuration: const Duration(milliseconds: 350),
           transition: Transition.fadeIn,
         ),
@@ -131,7 +131,7 @@ class Routes {
             builder: (BuildContext context) => const TopRatedStories());
       case RoutesName.generatestory:
         return MaterialPageRoute(
-            builder: (BuildContext context) => const GenerateStoryScreen());
+            builder: (BuildContext context) =>  GenerateStoryScreen());
       case RoutesName.profile:
         return MaterialPageRoute(
             builder: (BuildContext context) => const ProfileScreen());

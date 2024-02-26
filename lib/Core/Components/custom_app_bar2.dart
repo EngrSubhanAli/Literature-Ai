@@ -8,7 +8,7 @@ import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
-import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable

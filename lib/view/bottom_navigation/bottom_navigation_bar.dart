@@ -1,6 +1,7 @@
 import 'package:fab_circular_menu_plus/fab_circular_menu_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
@@ -9,7 +10,7 @@ import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/analyze_screen/analyze_screen.dart';
 import 'package:mvvm/view/edit_profile/edit_profile_screen.dart';
 import 'package:mvvm/view/generate_story/generate_story_screen.dart';
-import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:mvvm/view/home_screen/home_screen.dart';
 import 'package:mvvm/view/recommend_screen/recommend_screen.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +25,7 @@ class AppMainScreen extends StatefulWidget {
     const HomeScreen(),
     const EditProfileScreen(),
     const AnalyzeScreen(),
-    const GenerateStoryScreen(),
+     GenerateStoryScreen(),
     const RecommendScreen(),
   ];
   @override
@@ -34,7 +35,7 @@ class AppMainScreen extends StatefulWidget {
 class _AppMainScreenState extends State<AppMainScreen> {
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeProvider>(context, listen: true);
+    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -58,7 +59,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
           ),
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.pushNamed(context, RoutesName.analyze);
               },
@@ -68,9 +69,10 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 width: 67.w,
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
-                Navigator.pushNamed(context, RoutesName.generatestory);
+                // Navigator.pushNamed(context, RoutesName.generatestory);
+                Get.to(GenerateStoryScreen(preresponse: '',));
               },
               child: Image.asset(
                 g,
@@ -78,7 +80,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 width: 67.w,
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
                 Navigator.pushNamed(context, RoutesName.recomend);
               },

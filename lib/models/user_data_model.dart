@@ -20,7 +20,7 @@ class UserModel {
       required this.reported,
       required this.username});
 
-  factory UserModel.fromMap(Map<String, dynamic> data, String documentId) {
+  factory UserModel.fromMap(Map<String, dynamic> data) {
     final String uid = data['uid'];
     final String email = data['email'];
     final String username = data['username'];

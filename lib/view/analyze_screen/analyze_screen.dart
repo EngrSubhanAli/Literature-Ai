@@ -10,6 +10,9 @@ import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/edit_profile/edit_profile_screen.dart';
+import 'package:mvvm/view/generate_story/generate_story_screen.dart';
+
+List<String> genre = [];
 
 class AnalyzeScreen extends StatefulWidget {
   const AnalyzeScreen({super.key});
@@ -21,8 +24,11 @@ class AnalyzeScreen extends StatefulWidget {
 class _AnalyzeScreenState extends State<AnalyzeScreen> {
   TextEditingController autherController = TextEditingController();
   TextEditingController bookController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
+    genre = [];
     return SafeArea(
       child: Scaffold(
           appBar: AppBar(
@@ -60,176 +66,202 @@ class _AnalyzeScreenState extends State<AnalyzeScreen> {
               height: 1.sh,
               child: Padding(
                 padding: const EdgeInsets.only(top: 20, bottom: 60),
-                child: Column(
-                  children: [
-                    VerticalSizedBox(vertical: 20.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: CustomText(
-                          text: "Select Genre",
-                          fontSize: 16.sp,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    children: [
+                      VerticalSizedBox(vertical: 20.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: CustomText(
+                            text: "Select Genre",
+                            fontSize: 16.sp,
+                            color: blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    VerticalSizedBox(vertical: 20.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Action",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Adventure",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Comedy",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Death game",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Fantasy",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Satire",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Historical",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Thriller",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Horror",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Science fiction",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Historical fiction",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Science fiction",
-                          ),
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Historical fiction",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Row(
-                        children: [
-                          SelectGenreContainer(
-                            isSelected: false,
-                            title: "Speculative",
-                          ),
-                        ],
-                      ),
-                    ),
-                    VerticalSizedBox(vertical: 20.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: CustomText(
-                          text: "Author Name",
-                          fontSize: 16.sp,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
+                      VerticalSizedBox(vertical: 20.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Action",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Adventure",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Comedy",
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    EditProfileCustomTextField(
-                      controller: autherController,
-                      obscureText: false,
-                      scrollarea: 5,
-                      maxLines: 1,
-                      hintText: "",
-                    ),
-                    VerticalSizedBox(vertical: 30.h),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: CustomText(
-                          text: "Book Name",
-                          fontSize: 16.sp,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
+                      VerticalSizedBox(vertical: 10.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Death game",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Fantasy",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Satire",
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    VerticalSizedBox(vertical: 10.h),
-                    EditProfileCustomTextField(
-                      controller: bookController,
-                      obscureText: false,
-                      scrollarea: 4,
-                      maxLines: 1,
-                      hintText: "",
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, RoutesName.generatestory);
-                      },
-                      child: const CustomGradientButton(buttonText: "Generate"),
-                    ),
-                    const Spacer(),
-                  ],
+                      VerticalSizedBox(vertical: 10.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Historical",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Thriller",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Horror",
+                            ),
+                          ],
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Science fiction",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Historical fiction",
+                            ),
+                          ],
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Science fiction",
+                            ),
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Historical fiction",
+                            ),
+                          ],
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Row(
+                          children: [
+                            SelectGenreContainer(
+                              isSelected: false,
+                              title: "Speculative",
+                            ),
+                          ],
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 20.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: CustomText(
+                            text: "Author Name",
+                            fontSize: 16.sp,
+                            color: blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      EditProfileCustomTextField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Auther name cannot be empty';
+                          }
+
+                          return null;
+                        },
+                        controller: autherController,
+                        obscureText: false,
+                        scrollarea: 5,
+                        maxLines: 1,
+                        hintText: "",
+                      ),
+                      VerticalSizedBox(vertical: 30.h),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15.0),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: CustomText(
+                            text: "Book Name",
+                            fontSize: 16.sp,
+                            color: blackColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      VerticalSizedBox(vertical: 10.h),
+                      EditProfileCustomTextField(
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Book name cannot be empty';
+                          }
+
+                          return null;
+                        },
+                        controller: bookController,
+                        obscureText: false,
+                        scrollarea: 4,
+                        maxLines: 1,
+                        hintText: "",
+                      ),
+                      const Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            formKey.currentState!.save();
+                            String message =
+                                "Provide me review of the following book :   \nAuthor Name: ${autherController.text}\nBook Name: ${bookController.text}\nGenre :$genre";
+
+                            Get.to(GenerateStoryScreen(
+                              preresponse: message,
+                            ));
+                          }
+                        },
+                        child:
+                            const CustomGradientButton(buttonText: "Generate"),
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -259,6 +291,12 @@ class _SelectGenreContainerState extends State<SelectGenreContainer> {
       padding: const EdgeInsets.only(right: 10),
       child: GestureDetector(
         onTap: () {
+          if (genre.contains(widget.title)) {
+            genre.remove(widget.title);
+          }else{
+            genre.add(widget.title);
+          }
+
           setState(() {
             widget.isSelected = !widget.isSelected;
           });

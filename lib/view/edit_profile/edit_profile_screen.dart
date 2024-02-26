@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mvvm/Core/Components/app_button.dart';
 import 'package:mvvm/Core/Components/custom_appbar.dart';
 import 'package:mvvm/Core/Components/edit_password.dart';
@@ -8,7 +10,9 @@ import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/Core/constant/constan.dart';
-import 'package:mvvm/view/home_screen/home_provider.dart';
+import 'package:mvvm/services/firebase_db/firebase_db.dart';
+import 'package:mvvm/view/edit_profile/edit_profile_view_model.dart';
+import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:mvvm/view/profile_section/profile_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +24,23 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passController = TextEditingController();
-  TextEditingController confirmpassController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    final storyProvider =
+        Provider.of<EditProfileViewModel>(context, listen: false);
+    storyProvider.disposeLoginControllers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeProvider>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
+
+    final editProfileProvider =
+        Provider.of<EditProfileViewModel>(context, listen: true);
+    editProfileProvider.disposeLoginControllers();
     return homeprovider.condition == true
         ? SafeArea(
             child: Scaffold(
@@ -42,79 +56,141 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  child: Column(
-                    children: [
-                      CusotmAppBar(
-                        color: Colors.transparent,
-                        from: AppConstants.fromeidt,
-                      ),
-                      VerticalSizedBox(vertical: 20.sp),
-                      Row(
-                        children: [
-                          HorizontalSizedBox(horizontalSpace: 15.sp),
-                          CustomText(
-                            text: "Edit Profile",
-                            fontSize: 27.sp,
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ],
-                      ),
-                      VerticalSizedBox(vertical: 10.h),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            profilepic,
-                            width: 110.w,
-                            height: 110.h,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              VerticalSizedBox(vertical: 12.h),
-                              CustomText(
-                                text: "Jason Born",
-                                fontSize: 23.sp,
-                                color: blackColor,
-                                fontWeight: FontWeight.w600,
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        CusotmAppBar(
+                          color: Colors.transparent,
+                          from: AppConstants.fromeidt,
+                        ),
+                        VerticalSizedBox(vertical: 20.sp),
+                        Row(
+                          children: [
+                            HorizontalSizedBox(horizontalSpace: 15.sp),
+                            CustomText(
+                              text: "Edit Profile",
+                              fontSize: 27.sp,
+                              color: blackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
+                        VerticalSizedBox(vertical: 10.h),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (userData!.picUrl == "")
+                              Image.asset(
+                                profil2,
+                                width: 110.w,
+                                height: 110.h,
                               ),
-                              CustomText(
-                                text: "jasonborn@yourdomain.com",
-                                fontSize: 16.sp,
-                                color: blackColor.withOpacity(0.6),
-                                fontWeight: FontWeight.w400,
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                      VerticalSizedBox(vertical: 20.h),
-                      // textfields
-                      EditProfileCustomTextField(
-                        controller: nameController,
-                        scrollarea: 4,
-                        hintText: "Lolla Smith",
-                        prefixIcon: Icons.person,
-                      ),
-                      VerticalSizedBox(vertical: 30.h),
-                      EditProfileCustomTextField(
-                        controller: nameController,
-                        scrollarea: 4,
-                        hintText: "lolla_smith@example.com",
-                        prefixIcon: Icons.email,
-                      ),
-                      VerticalSizedBox(vertical: 30.h),
-                      EditPassowrdWidget(
-                        controller: passController,
-                      ),
-                      VerticalSizedBox(vertical: 30.h),
-                      EditPassowrdWidget(
-                        controller: confirmpassController,
-                      ),
-                      VerticalSizedBox(vertical: 50.h),
-                      const CustomGradientButton(buttonText: "Save")
-                    ],
+                            if (userData!.picUrl != "")
+                              Container(
+                                width: 110.w,
+                                height: 110.h,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                          userData!.picUrl!,
+                                        ))),
+                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                VerticalSizedBox(vertical: 12.h),
+                                CustomText(
+                                  text: userData!.username!,
+                                  fontSize: 23.sp,
+                                  color: blackColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                CustomText(
+                                  text: userData!.email!,
+                                  fontSize: 16.sp,
+                                  color: blackColor.withOpacity(0.6),
+                                  fontWeight: FontWeight.w400,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                        VerticalSizedBox(vertical: 20.h),
+                        // textfields
+                        EditProfileCustomTextField(
+                          validator: (value) {
+                            if (value == null) {
+                              return 'Kindly enter a valid username';
+                            }
+
+                            return null;
+                          },
+                          controller: editProfileProvider.nameController,
+                          scrollarea: 4,
+                          hintText: userData!.username!,
+                          prefixIcon: Icons.person,
+                        ),
+                        VerticalSizedBox(vertical: 30.h),
+                        EditProfileCustomTextField(
+                          validator: (value) {
+                            if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                    .hasMatch(value.toString()) ==
+                                false) {
+                              return 'Please enter a valid email address';
+                            }
+                            return null;
+                          },
+                          controller: editProfileProvider.emailController,
+                          scrollarea: 4,
+                          hintText: userData!.email!,
+                          prefixIcon: Icons.email,
+                        ),
+                        VerticalSizedBox(vertical: 30.h),
+                        EditPassowrdWidget(
+                          controller: editProfileProvider.passController,
+                          validator: (value) {
+                            if (value!.length > 8) {
+                              return 'Password should be atleast 8 characters';
+                            }
+                            return null;
+                          },
+                          hintText: "Type new password",
+                        ),
+                        VerticalSizedBox(vertical: 30.h),
+                        EditPassowrdWidget(
+                          controller: editProfileProvider.confirmpassController,
+                          hintText: "Confirm new password",
+                          validator: (value) {
+                            if (editProfileProvider
+                                    .confirmpassController.text !=
+                                editProfileProvider.passController.text) {
+                              return 'Passwords donot match';
+                            }
+                            return null;
+                          },
+                        ),
+                        VerticalSizedBox(vertical: 50.h),
+                        InkWell(
+                            onTap: editProfileProvider.isLoading
+                                ? () {}
+                                : () async {
+                                    await editProfileProvider.editProfile(
+                                        editProfileProvider
+                                            .emailController.text,
+                                        editProfileProvider.passController.text,
+                                        editProfileProvider
+                                            .nameController.text);
+                                    setState(() {});
+                                  },
+                            child: editProfileProvider.isLoading
+                                ? const CircularProgressIndicator()
+                                : const CustomGradientButton(
+                                    buttonText: "Save"))
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -126,6 +202,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 // EditProfileCustomTextfield
 
 //
+typedef FormValidator = String? Function(String?);
+
 class EditProfileCustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
@@ -136,6 +214,7 @@ class EditProfileCustomTextField extends StatefulWidget {
   final int? maxLines;
   final bool obscureText;
   final double scrollarea;
+  final FormValidator? validator;
 
   final TextInputType? keyboardType;
   // final Function(String)? onChanged;
@@ -145,6 +224,7 @@ class EditProfileCustomTextField extends StatefulWidget {
     required this.controller,
     required this.hintText,
     required this.scrollarea,
+    required this.validator,
     this.prefixIcon,
     this.maxlength,
     this.maxLines,
@@ -178,7 +258,7 @@ class _EditProfileCustomTextFieldState
             scrollDirection: Axis.vertical,
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: widget.scrollarea * 20.0),
-              child: TextField(
+              child: TextFormField(
                 maxLength: widget.maxlength,
                 maxLines: widget.maxLines,
                 minLines: widget.customLines,
@@ -208,6 +288,7 @@ class _EditProfileCustomTextFieldState
                 ),
                 obscureText: widget.obscureText,
                 keyboardType: widget.keyboardType,
+                validator: widget.validator,
               ),
             ),
           ),
