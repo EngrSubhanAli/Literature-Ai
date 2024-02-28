@@ -103,6 +103,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       ? GestureDetector(
                                           onTap: () {
                                             getImage();
+                                            print("not pressing");
                                           },
                                           child: Image.asset(
                                             profil2,
@@ -113,6 +114,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       : GestureDetector(
                                           onTap: () {
                                             getImage();
+                                            print("not pressing");
                                           },
                                           child: Container(
                                             height: 100.h,
@@ -240,7 +242,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                     ),
                   ),
-                  CusotmAppBar(color: whiteColor, from: AppConstants.fromeidt),
+                  CusotmAppBar(
+                    color: Colors.transparent,
+                    from: AppConstants.fromeidt,
+                  ),
                 ],
               ),
             ),

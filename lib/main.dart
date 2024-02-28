@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
               locale: const Locale('en', 'US'),
               theme: ThemeData(
                 appBarTheme: const AppBarTheme(
-                  foregroundColor: whiteColor,
+                  foregroundColor: Colors.transparent,
                   scrolledUnderElevation: 0.0,
                   // backgroundColor: whiteColor,
                   color: whiteColor,
