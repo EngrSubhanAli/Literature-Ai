@@ -29,7 +29,7 @@ class TextFieldContainer extends StatefulWidget {
 }
 
 class _TextFieldContainerState extends State<TextFieldContainer> {
-  bool visible = false;
+  bool visible = true;
   void toggleObscure() {
     setState(() {
       visible = !visible;
@@ -86,7 +86,7 @@ class _TextFieldContainerState extends State<TextFieldContainer> {
                       fontSize: 13.sp,
                     ),
                     controller: widget.textController,
-                    obscureText: visible,
+                    obscureText: widget.obscure == false ? false : visible,
                     decoration: InputDecoration(
                       hintText: widget.placeholder,
                       suffixIcon: widget.obscure == true

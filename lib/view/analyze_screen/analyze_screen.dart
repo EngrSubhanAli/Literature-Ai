@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'package:mvvm/Core/Components/app_button.dart';
+import 'package:mvvm/Core/Components/custom_app_bar2.dart';
+import 'package:mvvm/Core/Components/custom_appbar.dart';
 
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
@@ -33,33 +35,37 @@ class _AnalyzeScreenState extends State<AnalyzeScreen> {
       child: Scaffold(
           appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: Padding(
-              padding: EdgeInsets.symmetric(vertical: 30.sp),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  GestureDetector(
-                    onTap: (() {
-                      Get.back();
-                    }),
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                    ),
-                  ),
-                  CustomText(
-                    text: "Analyze",
-                    fontSize: 19.sp,
-                    color: blackColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  const Icon(
-                    Icons.arrow_back_ios,
-                    color: Colors.transparent,
-                  ),
-                ],
-              ),
-            ),
+            title: CusotmAppBar2(text: "Analyze", color: Colors.transparent),
           ),
+          // appBar: AppBar(
+          //   automaticallyImplyLeading: false,
+          //   title: Padding(
+          //     padding: EdgeInsets.symmetric(vertical: 30.sp),
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         GestureDetector(
+          //           onTap: (() {
+          //             Get.back();
+          //           }),
+          //           child: const Icon(
+          //             Icons.arrow_back_ios,
+          //           ),
+          //         ),
+          //         CustomText(
+          //           text: "Analyze",
+          //           fontSize: 19.sp,
+          //           color: blackColor,
+          //           fontWeight: FontWeight.bold,
+          //         ),
+          //         const Icon(
+          //           Icons.arrow_back_ios,
+          //           color: Colors.transparent,
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ),
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: SizedBox(
@@ -73,14 +79,12 @@ class _AnalyzeScreenState extends State<AnalyzeScreen> {
                       VerticalSizedBox(vertical: 20.h),
                       Padding(
                         padding: const EdgeInsets.only(left: 15.0),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: CustomText(
-                            text: "Select Genre",
-                            fontSize: 16.sp,
-                            color: blackColor,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: CustomText(
+                          customAlignment: Alignment.centerLeft,
+                          text: "Select Genre",
+                          fontSize: 16.sp,
+                          color: blackColor,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       VerticalSizedBox(vertical: 20.h),
@@ -193,6 +197,7 @@ class _AnalyzeScreenState extends State<AnalyzeScreen> {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: CustomText(
+                            customAlignment: Alignment.centerLeft,
                             text: "Author Name",
                             fontSize: 16.sp,
                             color: blackColor,
@@ -221,6 +226,7 @@ class _AnalyzeScreenState extends State<AnalyzeScreen> {
                         child: Align(
                           alignment: Alignment.topLeft,
                           child: CustomText(
+                            customAlignment: Alignment.centerLeft,
                             text: "Book Name",
                             fontSize: 16.sp,
                             color: blackColor,
@@ -293,7 +299,7 @@ class _SelectGenreContainerState extends State<SelectGenreContainer> {
         onTap: () {
           if (genre.contains(widget.title)) {
             genre.remove(widget.title);
-          }else{
+          } else {
             genre.add(widget.title);
           }
 

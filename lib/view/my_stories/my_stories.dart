@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:mvvm/Core/Components/custom_app_bar2.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
@@ -25,174 +26,53 @@ class _MyStoriesScreenState extends State<MyStoriesScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-
         // bottomNavigationBar: AppMainScreen(),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: Expanded(
-
+          child: SizedBox(
+            height: 1.sh,
             child: Column(
               children: [
                 VerticalSizedBox(vertical: 20.sp),
-                Row(
-                  children: [
-                    HorizontalSizedBox(horizontalSpace: 15.sp),
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        size: 25.sp,
-                        color: blackColor,
-                      ),
-                    ),
-                    CustomText(
-                      text: "My Stories",
-                      fontSize: 27.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
+                CusotmAppBar2(text: "My Stories", color: whiteColor),
                 VerticalSizedBox(vertical: 30.h),
-                 StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("Posts")
-            .orderBy("createdAt", descending: true)
-            .where("uid",isEqualTo: userData!.uid)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: 225.h,
-              width: 1.sw,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text(
-                'Error loading data',
-              ),
-            );
-          }
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("Posts")
+                      .orderBy("createdAt", descending: true)
+                      .where("uid", isEqualTo: userData!.uid)
+                      .snapshots(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return SizedBox(
+                        height: 225.h,
+                        width: 1.sw,
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: Text(
+                          'Error loading data',
+                        ),
+                      );
+                    }
 
-          return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (context, index) {
-
-              return 
-                   StoryItemWidget(
-                      index: index,
-                      snapshot: snapshot.data!.docs[index],
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return StoryItemWidget(
+                          index: index,
+                          snapshot: snapshot.data!.docs[index],
+                        );
+                      },
                     );
-            },
-          );
-        },
-      ),
-                // ListView.builder(
-                //   shrinkWrap: true,
-                //   physics: const NeverScrollableScrollPhysics(),
-                //   itemCount: posts.length,
-                //   itemBuilder: (context, index) {
-                //     return Padding(
-                //       padding: const EdgeInsets.symmetric(
-                //           horizontal: 15, vertical: 6),
-                //       child: Column(
-                //         children: [
-                //           Row(
-                //             children: [
-                //               Image.asset(
-                //                 posts[index].imageUrl,
-                //                 height: 40.h,
-                //                 width: 40.w,
-                //               ),
-                //               HorizontalSizedBox(horizontalSpace: 10.w),
-                //               CustomText(
-                //                 text: posts[index].name,
-                //                 fontSize: 12.sp,
-                //                 color: blackColor,
-                //                 fontWeight: FontWeight.w600,
-                //               ),
-                //               HorizontalSizedBox(horizontalSpace: 25.w),
-                //               CustomText(
-                //                 text: posts[index].time,
-                //                 fontSize: 12.sp,
-                //                 color: greyColor,
-                //                 fontWeight: FontWeight.w400,
-                //               ),
-                //               const Spacer(),
-                //               Image.asset(
-                //                 trash,
-                //                 height: 22.h,
-                //                 width: 22.w,
-                //               ),
-                //             ],
-                //           ),
-                //           VerticalSizedBox(vertical: 14.h),
-                //           Align(
-                //             alignment: Alignment.centerLeft,
-                //             child: CustomText(
-                //               text: posts[index].title,
-                //               fontSize: 14.sp,
-                //               color: blackColor,
-                //               fontWeight: FontWeight.w700,
-                //             ),
-                //           ),
-                //           VerticalSizedBox(vertical: 10.h),
-                //           Align(
-                //             alignment: Alignment.centerLeft,
-                //             child: CustomText(
-                //               text: posts[index].description,
-                //               fontSize: 11.sp,
-                //               color: blackColor,
-                //               fontWeight: FontWeight.w300,
-                //             ),
-                //           ),
-                //           SizedBox(height: 14.h),
-                //           Row(
-                //             children: [
-                //               Image.asset(
-                //                 like,
-                //                 height: 17.h,
-                //                 width: 17.w,
-                //               ),
-                //               HorizontalSizedBox(horizontalSpace: 7.sp),
-                //               CustomText(
-                //                 text: posts[index].likes.toString(),
-                //                 fontSize: 9.sp,
-                //                 color: blackColor,
-                //                 fontWeight: FontWeight.w300,
-                //               ),
-                //               HorizontalSizedBox(horizontalSpace: 15.sp),
-                //               Transform.rotate(
-                //                 angle: 3.14,
-                //                 child: Image.asset(
-                //                   like,
-                //                   height: 17.h,
-                //                   width: 17.w,
-                //                 ),
-                //               ),
-                //               HorizontalSizedBox(horizontalSpace: 7.sp),
-                //               CustomText(
-                //                 text: posts[index].likes.toString(),
-                //                 fontSize: 9.sp,
-                //                 color: blackColor,
-                //                 fontWeight: FontWeight.w300,
-                //               ),
-                //             ],
-                //           ),
-                //           SizedBox(height: 20.h),
-                //         ],
-                //       ),
-                //     );
-                //   },
-                // ),
+                  },
+                ),
               ],
             ),
           ),
@@ -200,8 +80,8 @@ class _MyStoriesScreenState extends State<MyStoriesScreen> {
       ),
     );
   }
-  
 }
+
 // ignore: must_be_immutable
 class StoryItemWidget extends StatefulWidget {
   int index;
@@ -226,7 +106,8 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
   Widget build(BuildContext context) {
     likedBy = widget.snapshot["likedBy"];
     dislikedBy = widget.snapshot["dislikedBy"];
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(
         left: 15,
@@ -269,53 +150,139 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
                 fontWeight: FontWeight.w400,
               ),
               const Spacer(),
-                              InkWell(
-                                onTap: (){
-                                  homeprovider.deleteStory(widget.snapshot);
+              InkWell(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: whiteColor,
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomText(
+                              text: "Logout",
+                              fontSize: 18.sp,
+                              color: blackColor,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ],
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(),
+                            VerticalSizedBox(vertical: 10.h),
+                            CustomText(
+                              textAlign: TextAlign.center,
+                              maxLines: 20,
+                              text:
+                                  "Are you sure you wanna delete this story ?",
+                              fontSize: 15.sp,
+                              color: blackColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ],
+                        ),
+                        actions: <Widget>[
+                          Row(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  // Perform action on cancel
+                                  Navigator.of(context).pop();
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset(
-                                    trash,
-                                    height: 22.h,
-                                    width: 22.w,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: greyColor.withOpacity(0.6),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                    left: 25.sp,
+                                    right: 25.sp,
+                                    top: 6.sp,
+                                    bottom: 6.sp,
+                                  ),
+                                  child: CustomText(
+                                    text: "Cancel",
+                                    fontSize: 15.sp,
+                                    color: blackColor,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
-                             const SizedBox(width: 15,)
-   
+                              TextButton(
+                                onPressed: () async {
+                                  homeprovider.deleteStory(widget.snapshot);
+                                  Navigator.of(context).pop();
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: pinkColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  padding: EdgeInsets.only(
+                                    left: 30.sp,
+                                    right: 40.sp,
+                                    top: 6.sp,
+                                    bottom: 6.sp,
+                                  ),
+                                  child: CustomText(
+                                    text: "Yes",
+                                    fontSize: 15.sp,
+                                    color: whiteColor,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.asset(
+                    trash,
+                    height: 22.h,
+                    width: 22.w,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                width: 15,
+              )
             ],
           ),
-          VerticalSizedBox(vertical: 14.h), 
-          Row(
-            children: [
-              HorizontalSizedBox(horizontalSpace: 5.w),
-              CustomText(
-                text: widget.snapshot["storyTittle"],
-                fontSize: 14.sp,
-                color: blackColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ],
+          VerticalSizedBox(vertical: 14.h),
+          CustomText(
+            customAlignment: Alignment.centerLeft,
+            maxLines: 20,
+            width: 0.9.sw,
+            text: widget.snapshot["storyTittle"],
+            fontSize: 14.sp,
+            color: blackColor,
+            fontWeight: FontWeight.w700,
           ),
           VerticalSizedBox(vertical: 10.h),
-          Padding(
-            padding: EdgeInsets.only(left: 5.w, right: 20.w),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: CustomText(
-                text: widget.snapshot["storyBody"],
-                fontSize: 11.sp,
-                color: blackColor,
-                fontWeight: FontWeight.w300,
-              ),
-            ),
+          CustomText(
+            width: 0.9.sw,
+            customAlignment: Alignment.centerLeft,
+            maxLines: 50,
+            text: widget.snapshot["storyBody"],
+            fontSize: 11.sp,
+            color: blackColor,
+            fontWeight: FontWeight.w300,
           ),
 
           ///
           SizedBox(height: 14.h),
           Row(
             children: [
+              HorizontalSizedBox(horizontalSpace: 15.sp),
               InkWell(
                 onTap: () {
                   homeprovider

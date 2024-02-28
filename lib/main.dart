@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
+import 'package:mvvm/view/on_boarding_screens/onboarding_screens.dart';
 
 import 'package:provider/provider.dart';
 
@@ -46,6 +48,12 @@ class MyApp extends StatelessWidget {
               textDirection: TextDirection.ltr,
               locale: const Locale('en', 'US'),
               theme: ThemeData(
+                appBarTheme: const AppBarTheme(
+                  foregroundColor: whiteColor,
+                  scrolledUnderElevation: 0.0,
+                  // backgroundColor: whiteColor,
+                  color: whiteColor,
+                ),
                 scaffoldBackgroundColor: whiteColor,
                 fontFamily: 'NunitoSans', //
                 primarySwatch: Colors.blue,
@@ -53,7 +61,7 @@ class MyApp extends StatelessWidget {
               // home: const SplashScreen(),
               // getPages: Routes
               //     .appRoutes(), // >>>>>>> use it if you want to use GetX<<<<<<<<<<<<
-              // home: TopRatedStories(),
+              // home: OnboardingScreens(),
               initialRoute: RoutesName.splash,
               onGenerateRoute: Routes.generateRoute,
             ),

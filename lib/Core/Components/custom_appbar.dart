@@ -17,7 +17,8 @@ class CusotmAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return Container(
       color: color,
       height: 65.h,

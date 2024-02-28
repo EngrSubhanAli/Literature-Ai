@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:mvvm/Core/Components/app_button.dart';
+import 'package:mvvm/Core/Components/custom_app_bar2.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/Components/textfield_container.dart';
+import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 
 import 'package:mvvm/utils/routes/routes_name.dart';
@@ -27,214 +29,182 @@ class _RecommendScreenState extends State<RecommendScreen> {
   TextEditingController genre1 = TextEditingController();
   TextEditingController genre2 = TextEditingController();
   TextEditingController genre3 = TextEditingController();
-   final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
-   @override
+  @override
   void initState() {
-           author1 = TextEditingController();
-   author2 = TextEditingController();
-   author3 = TextEditingController();
-   book1 = TextEditingController();
-   book2 = TextEditingController();
-   book3 = TextEditingController();
-   genre1 = TextEditingController();
-   genre2 = TextEditingController();
-   genre3 = TextEditingController();
+    author1 = TextEditingController();
+    author2 = TextEditingController();
+    author3 = TextEditingController();
+    book1 = TextEditingController();
+    book2 = TextEditingController();
+    book3 = TextEditingController();
+    genre1 = TextEditingController();
+    genre2 = TextEditingController();
+    genre3 = TextEditingController();
     // TODO: implement initState
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: 40.h),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: formKey,
-            child: Column(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: CusotmAppBar2(text: "Recommend", color: Colors.transparent),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            VerticalSizedBox(vertical: 30.h),
+            Row(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 15.0, top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      GestureDetector(
-                        onTap: (() {
-                          Get.back();
-                        }),
-                        child: const Icon(
-                          Icons.arrow_back_ios,
-                        ),
-                      ),
-                      CustomText(
-                        text: "Recommend ",
-                        fontSize: 19.sp,
-                        color: blackColor,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.transparent,
-                      ),
-                    ],
-                  ),
+                SizedBox(width: 20.w),
+                CustomText(
+                  text: "Favorite Author ",
+                  fontSize: 16.sp,
+                  color: blackColor,
+                  fontWeight: FontWeight.bold,
                 ),
-                VerticalSizedBox(vertical: 50.h),
-                Row(
-                  children: [
-                    SizedBox(width: 20.w),
-                    CustomText(
-                      text: "Favorite Author ",
-                      fontSize: 16.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: author1,
-                  valdator: (value) {
-                    if (value == "") {
-                      return 'You need to add atleast 1  favourite author';
-                    }
-            
-                    return null;
-                  },
-                  hint: "",
-                  number: 1,
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: author2,
-                  valdator: (value) {
-                    return null;
-                  },
-                  hint: "Optional",
-                  number: 2,
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: author3,
-                  valdator: (value) {
-                    return null;
-                  },
-                  hint: "Optional",
-                  number: 3,
-                ),
-            
-                //favourite book
-                VerticalSizedBox(vertical: 30.h),
-                Row(
-                  children: [
-                    SizedBox(width: 20.w),
-                    CustomText(
-                      text: "Favorite Book ",
-                      fontSize: 16.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: book1,
-                  hint: "",
-                  valdator: (value) {
-                    if (value == "") {
-                      return 'You need to add atleast 1  favourite book';
-                    }
-            
-                    return null;
-                  },
-                  number: 1,
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: book2,
-                  hint: "Optional",
-                  valdator: (value) {
-                    return null;
-                  },
-                  number: 2,
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: book3,
-                  valdator: (value) {
-                    return null;
-                  },
-                  hint: "Optional",
-                  number: 3,
-                ),
-                //favourite genre
-                VerticalSizedBox(vertical: 30.h),
-                Row(
-                  children: [
-                    SizedBox(width: 20.w),
-                    CustomText(
-                      text: "Favorite Genre ",
-                      fontSize: 16.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  hint: "",
-                  controller: genre1,
-                  number: 1,
-                  valdator: (value) {
-                    if (value == "") {
-                      return 'You need to add atleast 1  favourite genre';
-                    }
-            
-                    return null;
-                  },
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: genre2,
-                  valdator: (value) {
-                    return null;
-                  },
-                  hint: "Optional",
-                  number: 2,
-                ),
-                VerticalSizedBox(vertical: 20.h),
-                RecommendTextField(
-                  controller: genre3,
-                  valdator: (value) {
-                    return null;
-                  },
-                  hint: "Optional",
-                  number: 3,
-                ),
-                const VerticalSizedBox(vertical: 40),
-                GestureDetector(
-                  onTap: () {
-                     if (formKey.currentState!.validate()) {
-                  formKey.currentState!.save();
-                    String message =
-                        "Based on the following books authors , book names and genre suggest me 5  books\nHere is the list of Authors : \n${author1.text}\n${author2.text}\n${author3.text}\nHere is the list of Books : \n${book1.text}\n${book2.text}\n${book3.text}\nHere is the list of Genre : \n${genre1.text}\n${genre2.text}\n${genre3.text}";
-            
-                    Get.to(GenerateStoryScreen(
-                      preresponse: message,
-                    ));
-                     }
-                  
-                  },
-                  child: const CustomGradientButton(buttonText: "Generate"),
-                ),
-                const VerticalSizedBox(vertical: 40),
               ],
             ),
-          ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: author1,
+              valdator: (value) {
+                if (value == "") {
+                  return 'You need to add atleast 1  favourite author';
+                }
+
+                return null;
+              },
+              hint: "",
+              number: 1,
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: author2,
+              valdator: (value) {
+                return null;
+              },
+              hint: "Optional",
+              number: 2,
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: author3,
+              valdator: (value) {
+                return null;
+              },
+              hint: "Optional",
+              number: 3,
+            ),
+
+            //favourite book
+            VerticalSizedBox(vertical: 30.h),
+            Row(
+              children: [
+                SizedBox(width: 20.w),
+                CustomText(
+                  text: "Favorite Book ",
+                  fontSize: 16.sp,
+                  color: blackColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ],
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: book1,
+              hint: "",
+              valdator: (value) {
+                if (value == "") {
+                  return 'You need to add atleast 1  favourite book';
+                }
+
+                return null;
+              },
+              number: 1,
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: book2,
+              hint: "Optional",
+              valdator: (value) {
+                return null;
+              },
+              number: 2,
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: book3,
+              valdator: (value) {
+                return null;
+              },
+              hint: "Optional",
+              number: 3,
+            ),
+            //favourite genre
+            VerticalSizedBox(vertical: 30.h),
+            Row(
+              children: [
+                SizedBox(width: 20.w),
+                CustomText(
+                  text: "Favorite Genre ",
+                  fontSize: 16.sp,
+                  color: blackColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ],
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              hint: "",
+              controller: genre1,
+              number: 1,
+              valdator: (value) {
+                if (value == "") {
+                  return 'You need to add atleast 1  favourite genre';
+                }
+
+                return null;
+              },
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: genre2,
+              valdator: (value) {
+                return null;
+              },
+              hint: "Optional",
+              number: 2,
+            ),
+            VerticalSizedBox(vertical: 20.h),
+            RecommendTextField(
+              controller: genre3,
+              valdator: (value) {
+                return null;
+              },
+              hint: "Optional",
+              number: 3,
+            ),
+            const VerticalSizedBox(vertical: 40),
+            GestureDetector(
+              onTap: () {
+                if (formKey.currentState!.validate()) {
+                  formKey.currentState!.save();
+                  String message =
+                      "Based on the following books authors , book names and genre suggest me 5  books\nHere is the list of Authors : \n${author1.text}\n${author2.text}\n${author3.text}\nHere is the list of Books : \n${book1.text}\n${book2.text}\n${book3.text}\nHere is the list of Genre : \n${genre1.text}\n${genre2.text}\n${genre3.text}";
+
+                  Get.to(GenerateStoryScreen(
+                    preresponse: message,
+                  ));
+                }
+              },
+              child: const CustomGradientButton(buttonText: "Generate"),
+            ),
+            const VerticalSizedBox(vertical: 40),
+          ],
         ),
       ),
     );

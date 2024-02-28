@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mvvm/Core/Components/custom_appbar.dart';
+import 'package:mvvm/Core/Components/descriptioncustomText.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
@@ -28,17 +31,17 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return homeprovider.condition == true
         ? SafeArea(
             child: Scaffold(
                 body: Stack(
               children: [
-                SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Expanded(
-                    // height: posts.length * 0.41.sh,
-                    // width: 1.sw,
+                SizedBox(
+                  height: 0.98.sh,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
                         SizedBox(height: 70.h),
@@ -48,17 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: StatusSectionHomeScreen(),
                         ),
                         VerticalSizedBox(vertical: 10.h),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Padding(
-                            padding: EdgeInsets.only(left: 20.sp),
-                            child: CustomText(
-                              text: "Stories",
-                              fontSize: 27.sp,
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.sp),
+                              child: CustomText(
+                                text: "Stories",
+                                fontSize: 27.sp,
+                                color: blackColor,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
+                          ],
                         ),
                         VerticalSizedBox(vertical: 10.h),
                         // Stories
@@ -67,22 +71,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                
-                CusotmAppBar(color: whiteColor, from: AppConstants.fromhome),
-                  Positioned(
-                      bottom: 40.h,
-                      right: 15.w,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, RoutesName.poststory);
-                        },
-                        child: Image.asset(
-                          addbutton,
-                          height: 70.h,
-                          width: 70.w,
-                        ),
+                Positioned(
+                  bottom: 80.h,
+                  right: 20.w,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, RoutesName.poststory);
+                    },
+                    child: Container(
+                      height: 65.h,
+                      width: 65.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: blackColor.withOpacity(0.30),
+                            spreadRadius: 0,
+                            blurRadius: 25.sp,
+                            offset: Offset(13.sp, 12.sp),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        addbutton,
+                        height: 70.h,
+                        width: 70.w,
                       ),
                     ),
+                  ),
+                ),
+                CusotmAppBar(color: whiteColor, from: AppConstants.fromhome),
               ],
             )),
           )
@@ -101,110 +119,109 @@ class StatusSectionHomeScreen extends StatefulWidget {
 class _StatusSectionHomeScreenState extends State<StatusSectionHomeScreen> {
   @override
   Widget build(BuildContext context) {
-    Timestamp twentyFourHoursAgo = Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 24)));
+    Timestamp twentyFourHoursAgo =
+        Timestamp.fromDate(DateTime.now().subtract(const Duration(hours: 24)));
     return SizedBox(
-      height: 100.h,
-      width: 1.sw,
-      child: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection("Stroies")
-            
-            .orderBy("createdAt", descending: true)
-            .where('createdAt', isGreaterThanOrEqualTo: twentyFourHoursAgo)
-            .snapshots(),
-        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: 225.h,
-              width: 1.sw,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text(
-                'Error loading data',
-              ),
-            );
-          }
-         
-         return ListView.builder(
-        physics: const BouncingScrollPhysics(),
-        itemCount:snapshot.data!.docs.length,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index)  {
+        height: 100.h,
+        width: 1.sw,
+        child: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection("Stroies")
+                .orderBy("createdAt", descending: true)
+                .where('createdAt', isGreaterThanOrEqualTo: twentyFourHoursAgo)
+                .snapshots(),
+            builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                  height: 225.h,
+                  width: 1.sw,
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text(
+                    'Error loading data',
+                  ),
+                );
+              }
 
-       
-
-
-
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 5.sp),
-            child: Column(
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => StatuStoriesScreen(
-                            snapshot:snapshot.data!.docs[index] ,
-                            )));
-                  },
-                  child: Container(
-                    height: 70.h,
-                    width: 70.w,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          storycontainer,
-                        ), // Replace with your image asset path
-                      ),
-                    ),
+              return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                itemCount: snapshot.data!.docs.length,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 5.sp),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        CustomText(
-                          text: snapshot.data!.docs[index]["storyTittle"],
-                          fontSize: 5.sp,
-                          color: blackColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Text(
-                            textAlign: TextAlign.center,
-                             snapshot.data!.docs[index]["storyBody"].toString(),
-                            overflow: TextOverflow
-                                .ellipsis, // or TextOverflow.clip for clipping without ellipsis
-                            maxLines: 4,
-                            style: TextStyle(
-                              fontSize: 3.sp,
-                              color: blackColor,
-                              fontWeight: FontWeight.w300,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => StatuStoriesScreen(
+                                      snapshot: snapshot.data!.docs[index],
+                                    )));
+                          },
+                          child: Container(
+                            height: 70.h,
+                            width: 70.w,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage(
+                                  storycontainer,
+                                ), // Replace with your image asset path
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                CustomText(
+                                  customAlignment: Alignment.center,
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  width: 0.9.sw,
+                                  text: snapshot.data!.docs[index]
+                                      ["storyTittle"],
+                                  fontSize: 3.sp,
+                                  color: blackColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Text(
+                                    textAlign: TextAlign.center,
+                                    snapshot.data!.docs[index]["storyBody"]
+                                        .toString(),
+                                    overflow: TextOverflow
+                                        .ellipsis, // or TextOverflow.clip for clipping without ellipsis
+                                    maxLines: 4,
+                                    style: TextStyle(
+                                      fontSize: 3.sp,
+                                      color: blackColor,
+                                      fontWeight: FontWeight.w300,
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           ),
+                        ),
+                        SizedBox(height: 7.h),
+                        CustomText(
+                          text: snapshot.data!.docs[index]["username"],
+                          fontSize: 10.sp,
+                          color: blackColor,
+                          fontWeight: FontWeight.w500,
                         )
                       ],
                     ),
-                  ),
-                ),
-                SizedBox(height: 7.h),
-                CustomText(
-                  text:  snapshot.data!.docs[index]["username"],
-                  fontSize: 10.sp,
-                  color: blackColor,
-                  fontWeight: FontWeight.w500,
-                )
-              ],
-            ),
-          );
-        },
-      );
-          
-         } 
-    ));
+                  );
+                },
+              );
+            }));
   }
 }
 
@@ -237,7 +254,7 @@ class StoriesSectionHomeScreen extends StatelessWidget {
             ),
           );
         }
-    
+
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,
           physics: const NeverScrollableScrollPhysics(),
@@ -281,7 +298,8 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
   Widget build(BuildContext context) {
     likedBy = widget.snapshot["likedBy"];
     dislikedBy = widget.snapshot["dislikedBy"];
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return Padding(
       padding: const EdgeInsets.only(
         left: 15,
@@ -330,23 +348,31 @@ class _StoryItemWidgetState extends State<StoryItemWidget> {
             ],
           ),
           VerticalSizedBox(vertical: 14.h),
-          Row(
-            children: [
-              HorizontalSizedBox(horizontalSpace: 5.w),
-              CustomText(
-                text: widget.snapshot["storyTittle"],
-                fontSize: 14.sp,
-                color: blackColor,
-                fontWeight: FontWeight.w700,
-              ),
-            ],
+          HorizontalSizedBox(horizontalSpace: 5.w),
+          Padding(
+            padding: EdgeInsets.only(left: 5.w, right: 0.w),
+            child: Row(
+              children: [
+                CustomText(
+                  width: 0.8.sw,
+                  customAlignment: Alignment.centerLeft,
+                  textAlign: TextAlign.left,
+                  maxLines: 1,
+                  text: widget.snapshot["storyTittle"],
+                  fontSize: 14.sp,
+                  color: blackColor,
+                  fontWeight: FontWeight.w700,
+                ),
+              ],
+            ),
           ),
           VerticalSizedBox(vertical: 10.h),
           Padding(
             padding: EdgeInsets.only(left: 5.w, right: 20.w),
             child: Align(
               alignment: Alignment.centerLeft,
-              child: CustomText(
+              child: DescriptionTextWidget(
+                maxLines: 50,
                 text: widget.snapshot["storyBody"],
                 fontSize: 11.sp,
                 color: blackColor,
@@ -432,7 +458,8 @@ class ReportPostButton extends StatefulWidget {
 class _ReportPostButtonState extends State<ReportPostButton> {
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return PopupMenuButton<String>(
       color: whiteColor,
       surfaceTintColor: whiteColor,
@@ -446,10 +473,9 @@ class _ReportPostButtonState extends State<ReportPostButton> {
       ),
       itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
         PopupMenuItem<String>(
-            onTap: () async {
-               homeprovider.hideStory(widget.snapshot);
-
-            },
+          onTap: () async {
+            homeprovider.hideStory(widget.snapshot);
+          },
           height: 25.h,
           value: 'hide',
           child: Row(
@@ -461,7 +487,7 @@ class _ReportPostButtonState extends State<ReportPostButton> {
                 color: blackColor,
               ),
               const HorizontalSizedBox(horizontalSpace: 10),
-              const CustomText(
+              CustomText(
                 text: "Hide",
                 fontSize: 12,
                 color: blackColor,
@@ -473,10 +499,9 @@ class _ReportPostButtonState extends State<ReportPostButton> {
         ),
         const PopupMenuDivider(),
         PopupMenuItem<String>(
-       onTap: () {
-              homeprovider.reportUser(widget.snapshot);
-
-            },
+          onTap: () {
+            homeprovider.reportUser(widget.snapshot);
+          },
           value: 'Report',
           height: 25.h,
           child: Row(
@@ -488,7 +513,7 @@ class _ReportPostButtonState extends State<ReportPostButton> {
                 color: blackColor,
               ),
               const HorizontalSizedBox(horizontalSpace: 10),
-              const CustomText(
+              CustomText(
                 text: "Report User",
                 fontSize: 12,
                 color: blackColor,

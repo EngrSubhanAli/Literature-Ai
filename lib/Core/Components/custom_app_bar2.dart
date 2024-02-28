@@ -8,8 +8,6 @@ import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
-import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
-import 'package:provider/provider.dart';
 
 // ignore: must_be_immutable
 class CusotmAppBar2 extends StatelessWidget {
@@ -26,30 +24,33 @@ class CusotmAppBar2 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: color,
-      height: 60.h,
-      child: Row(
-        children: [
-          HorizontalSizedBox(horizontalSpace: 8.sp),
-          GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Image.asset(
-              backarrow,
-              height: 30.sp,
-              width: 30.sp,
+      // height: 60.h,
+      child: Padding(
+        padding: EdgeInsets.only(top: 10.sp),
+        child: Row(
+          children: [
+            HorizontalSizedBox(horizontalSpace: 8.sp),
+            GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Image.asset(
+                backarrow,
+                height: 30.sp,
+                width: 30.sp,
+              ),
             ),
-          ),
-          const Spacer(),
-          CustomText(
-            text: text,
-            fontSize: 19.sp,
-            color: blackColor,
-            fontWeight: FontWeight.bold,
-          ),
-          const Spacer(),
-          HorizontalSizedBox(horizontalSpace: 40.w),
-        ],
+            const Spacer(),
+            CustomText(
+              text: text,
+              fontSize: 19.sp,
+              color: blackColor,
+              fontWeight: FontWeight.bold,
+            ),
+            const Spacer(),
+            HorizontalSizedBox(horizontalSpace: 40.w),
+          ],
+        ),
       ),
     );
   }

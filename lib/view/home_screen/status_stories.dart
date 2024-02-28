@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:mvvm/Core/Components/helper_components.dart';
@@ -50,92 +53,109 @@ class _StatuStoriesScreenState extends State<StatuStoriesScreen> {
       debugPrint(timeAgo.toString());
       timeAgo = timeAgo.replaceAll("~", "");
 
-      storyItemList.add(StoryItem(
-        Container(
-          height: 1.sh,
-          width: 1.sh,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage(background2),
-            fit: BoxFit.cover,
-          )),
-          child: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 15.0, right: 15, top: 30),
-                child: Row(
-                  children: [
-                    if (widget.snapshot["picUrl"] == "")
-                      Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: AssetImage(
-                                  profil2,
-                                ))),
-                      ),
-                    if (widget.snapshot["picUrl"] != "")
-                      Container(
-                        height: 40.h,
-                        width: 40.w,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  widget.snapshot["picUrl"],
-                                ))),
-                      ),
-                    HorizontalSizedBox(horizontalSpace: 10.w),
-                    CustomText(
-                      text: widget.snapshot["username"],
-                      fontSize: 12.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.w600,
+      storyItemList.add(
+        StoryItem(
+          GestureDetector(
+            onVerticalDragUpdate: (details) {
+              // Dismiss the page when swiped down
+              if (details.primaryDelta! > 10) {
+                Navigator.of(context).pop();
+              }
+            },
+            // onDoubleTap: () {
+            //   Get.back();
+            // },
+            child: Container(
+              height: 1.sh,
+              width: 1.sh,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage(background2),
+                fit: BoxFit.cover,
+              )),
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 15.0, right: 15, top: 30),
+                    child: Row(
+                      children: [
+                        if (widget.snapshot["picUrl"] == "")
+                          Container(
+                            height: 40.h,
+                            width: 40.w,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      profil2,
+                                    ))),
+                          ),
+                        if (widget.snapshot["picUrl"] != "")
+                          Container(
+                            height: 40.h,
+                            width: 40.w,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      widget.snapshot["picUrl"],
+                                    ))),
+                          ),
+                        HorizontalSizedBox(horizontalSpace: 10.w),
+                        CustomText(
+                          text: widget.snapshot["username"],
+                          fontSize: 12.sp,
+                          color: whiteColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        HorizontalSizedBox(horizontalSpace: 25.w),
+                        CustomText(
+                          text: timeAgo,
+                          fontSize: 10.sp,
+                          color: greyColor,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        const Spacer(),
+                      ],
                     ),
-                    HorizontalSizedBox(horizontalSpace: 25.w),
-                    CustomText(
-                      text: timeAgo,
-                      fontSize: 10.sp,
-                      color: greyColor,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    const Spacer(),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                  ),
+                  const Spacer(),
                   CustomText(
+                    width: 0.9.sw,
+                    maxLines: 40,
+                    customAlignment: Alignment.center,
+                    textAlign: TextAlign.center,
                     text: storiesSnapshot[i].data()['storyTittle'],
                     fontSize: 20.sp,
                     color: whiteColor,
                     fontWeight: FontWeight.bold,
                   ),
+                  VerticalSizedBox(vertical: 20.h),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: CustomText(
+                      width: 0.9.sw,
+                      maxLines: 100,
+                      textAlign: TextAlign.center,
+                      customAlignment: Alignment.center,
+                      text: storiesSnapshot[i].data()['storyBody'],
+                      fontSize: 18.sp,
+                      color: whiteColor,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  VerticalSizedBox(vertical: 60.h),
+                  const Spacer(),
                 ],
               ),
-              VerticalSizedBox(vertical: 20.h),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: CustomText(
-                  text: storiesSnapshot[i].data()['storyBody'],
-                  fontSize: 18.sp,
-                  color: whiteColor,
-                  fontWeight: FontWeight.w400,
-                ),
-              ),
-              VerticalSizedBox(vertical: 60.h),
-              const Spacer(),
-            ],
+            ),
           ),
+          duration: const Duration(seconds: 2),
         ),
-        duration: const Duration(seconds: 2),
-      ));
+      );
     }
     setState(() {
       loading = false;
@@ -162,12 +182,27 @@ class _StatuStoriesScreenState extends State<StatuStoriesScreen> {
       child: Scaffold(
         body: loading
             ? Center(
-                child: SizedBox(
+                child: Container(
                     height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width / 2,
-                    child: const Center(child: LinearProgressIndicator())),
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(
+                          background2,
+                        ), // Replace with your image URL
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                        child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 100.sp),
+                      child: const LinearProgressIndicator(),
+                    ))),
               )
             : StoryView(
+                onComplete: () {
+                  Get.back();
+                },
                 storyItems: storyItemList,
                 controller: storyController,
               ),

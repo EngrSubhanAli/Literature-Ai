@@ -23,156 +23,152 @@ class _TopRatedStoriesState extends State<TopRatedStories> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: CusotmAppBar2(
+              text: "Top Rated Stories", color: Colors.transparent),
+        ),
         body: SizedBox(
           height: 1.sh,
           width: 1.sw,
           child: Column(
             children: [
-              VerticalSizedBox(vertical: 5.sp),
-              CusotmAppBar2(
-                color: whiteColor,
-                text: "Top Rated Stories",
-              ),
               VerticalSizedBox(vertical: 10.h),
               Expanded(
                 child: StreamBuilder(
-                      stream: FirebaseFirestore.instance
-            .collection("Posts")
-            .orderBy("likes", descending: true)
-            .limit(7)
-            .snapshots(),
-
-                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return SizedBox(
-              height: 225.h,
-              width: 1.sw,
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text(
-                'Error loading data',
-              ),
-            );
-          }
-         return ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      var snapshotvalue =snapshot.data!.docs[index]; 
-                      return Padding(
-                        padding: EdgeInsets.only(
-                          left: 15.sp,
-                          right: 15.sp,
-                          bottom: 15.sp,
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        StoryDetailScreen(
-                                          snapshot: snapshot.data!.docs[index],
-                               
-                                  rank: index,
-                            
-                        
-                                ),
-                                transitionDuration: const Duration(
-                                    seconds: 0), // No transition duration
-                              ),
-                            );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: const LinearGradient(
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                                colors: [
-                                  Color(0xff3FFAFE),
-                                  Color(0xfB71C5FF),
-                                  Color(0xff6D94FD),
-                                  Color(0xffB463FD),
-                                ],
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 0,
-                                  blurRadius: 13,
-                                  offset: const Offset(3, 6),
-                                ),
-                              ],
+                    stream: FirebaseFirestore.instance
+                        .collection("Posts")
+                        .orderBy("likes", descending: true)
+                        .limit(7)
+                        .snapshots(),
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SizedBox(
+                          height: 225.h,
+                          width: 1.sw,
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return const Center(
+                          child: Text(
+                            'Error loading data',
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          var snapshotvalue = snapshot.data!.docs[index];
+                          return Padding(
+                            padding: EdgeInsets.only(
+                              left: 15.sp,
+                              right: 15.sp,
+                              bottom: 15.sp,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Stack(
-                                  children: [
-                                    Image.asset(
-                                      badge,
-                                      height: 58.h,
-                                      width: 51.w,
+                            child: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        StoryDetailScreen(
+                                      snapshot: snapshot.data!.docs[index],
+                                      rank: index,
                                     ),
-                                    Positioned(
-                                      left: 20.sp,
-                                      top: 8.sp,
-                                      child: CustomText(
-                                        text: (index + 1).toString(),
-                                        fontSize: 15.sp,
-                                        color: whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                    transitionDuration: const Duration(
+                                        seconds: 0), // No transition duration
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  gradient: const LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xff3FFAFE),
+                                      Color(0xfB71C5FF),
+                                      Color(0xff6D94FD),
+                                      Color(0xffB463FD),
+                                    ],
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.5),
+                                      spreadRadius: 0,
+                                      blurRadius: 13,
+                                      offset: const Offset(3, 6),
                                     ),
                                   ],
                                 ),
-                                Column(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    VerticalSizedBox(vertical: 10.h),
-                                    SizedBox(
-                                      width: 0.75.sw,
-                                      child: CustomText(
-                                        text:snapshotvalue["storyTittle"],
-                                        fontSize: 14.sp,
-                                        color: whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 0.75.sw,
-                                      child: Text(
-                                       snapshotvalue["storyBody"],
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 3,
-                                        style: TextStyle(
-                                          fontSize: 11.sp,
-                                          color: whiteColor,
-                                          fontWeight: FontWeight.w300,
+                                    Stack(
+                                      children: [
+                                        Image.asset(
+                                          badge,
+                                          height: 58.h,
+                                          width: 51.w,
                                         ),
-                                      ),
+                                        Positioned(
+                                          left: 20.sp,
+                                          top: 8.sp,
+                                          child: CustomText(
+                                            text: (index + 1).toString(),
+                                            fontSize: 15.sp,
+                                            color: whiteColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    VerticalSizedBox(vertical: 12.h),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        VerticalSizedBox(vertical: 10.h),
+                                        SizedBox(
+                                          width: 0.75.sw,
+                                          child: CustomText(
+                                            customAlignment:
+                                                Alignment.centerLeft,
+                                            text: snapshotvalue["storyTittle"],
+                                            fontSize: 14.sp,
+                                            color: whiteColor,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: 0.75.sw,
+                                          child: Text(
+                                            snapshotvalue["storyBody"],
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 3,
+                                            style: TextStyle(
+                                              fontSize: 11.sp,
+                                              color: whiteColor,
+                                              fontWeight: FontWeight.w300,
+                                            ),
+                                          ),
+                                        ),
+                                        VerticalSizedBox(vertical: 12.h),
+                                      ],
+                                    ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       );
-                    },
-                  );
-                 }
-            
-                  
-                ),
+                    }),
               ),
             ],
           ),

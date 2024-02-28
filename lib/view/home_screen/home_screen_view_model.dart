@@ -13,6 +13,14 @@ class HomeScreenViewModel extends ChangeNotifier {
     notifyListeners(); // Notify listeners about the change
   }
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+  void currentIndexCondition(int currentIndexcondition) {
+    _currentIndex = currentIndexcondition;
+
+    notifyListeners(); // Notify listeners about the change
+  }
+
   String _setStateForHome = AppConstants.fromhome;
   String get setStateForHome => _setStateForHome;
   void setStateforHome(String setStateforHome) {
@@ -123,30 +131,28 @@ class HomeScreenViewModel extends ChangeNotifier {
         .where("storyTittle", isEqualTo: snapshot["storyTittle"])
         .get()
         .then((value) async {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection("Stroies")
+          .doc(userData!.uid)
+          .collection("storyList")
+          .get();
 
-               QuerySnapshot querySnapshot =await FirebaseFirestore.instance
-            .collection("Stroies").doc(userData!.uid).collection("storyList").get();
-
-            if(querySnapshot.docs.length<2){
-
-              await FirebaseFirestore.instance
-            .collection("Stroies").doc(userData!.uid).update({
-
-              "createdAt":DateTime.now().subtract(const Duration(days: 2))
-
-            });
-
-
-
-            }
-
-
-           await FirebaseFirestore.instance
-        .collection("Stroies")
-        .doc(userData!.uid)
-        .collection("storyList").doc(value.docs[0].id).delete();
-
+      if (querySnapshot.docs.length < 2) {
+        await FirebaseFirestore.instance
+            .collection("Stroies")
+            .doc(userData!.uid)
+            .update({
+          "createdAt": DateTime.now().subtract(const Duration(days: 2))
         });
+      }
+
+      await FirebaseFirestore.instance
+          .collection("Stroies")
+          .doc(userData!.uid)
+          .collection("storyList")
+          .doc(value.docs[0].id)
+          .delete();
+    });
 
     Fluttertoast.showToast(
       msg: "Story deleted sucessfully",

@@ -15,6 +15,8 @@ import 'package:mvvm/view/edit_profile/edit_profile_view_model.dart';
 import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:mvvm/view/profile_section/profile_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -24,6 +26,22 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  File? image;
+
+  final picker = ImagePicker();
+
+  Future getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        image = File(pickedFile.path);
+      } else {
+        ('No image selected.');
+      }
+    });
+  }
+
   final formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -45,154 +63,185 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         ? SafeArea(
             child: Scaffold(
               resizeToAvoidBottomInset: false,
-              body: SingleChildScrollView(
-                child: Container(
-                  height: 1.sh,
-                  width: 1.sw,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                          background), // Replace with your image asset path
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        CusotmAppBar(
-                          color: Colors.transparent,
-                          from: AppConstants.fromeidt,
+              body: Stack(
+                children: [
+                  SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Container(
+                      height: 0.93.sh,
+                      width: 1.sw,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                              background), // Replace with your image asset path
+                          fit: BoxFit.cover,
                         ),
-                        VerticalSizedBox(vertical: 20.sp),
-                        Row(
+                      ),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
                           children: [
-                            HorizontalSizedBox(horizontalSpace: 15.sp),
-                            CustomText(
-                              text: "Edit Profile",
-                              fontSize: 27.sp,
-                              color: blackColor,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ],
-                        ),
-                        VerticalSizedBox(vertical: 10.h),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if (userData!.picUrl == "")
-                              Image.asset(
-                                profil2,
-                                width: 110.w,
-                                height: 110.h,
-                              ),
-                            if (userData!.picUrl != "")
-                              Container(
-                                width: 110.w,
-                                height: 110.h,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        fit: BoxFit.cover,
-                                        image: NetworkImage(
-                                          userData!.picUrl!,
-                                        ))),
-                              ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            VerticalSizedBox(vertical: 80.sp),
+                            Row(
                               children: [
-                                VerticalSizedBox(vertical: 12.h),
+                                HorizontalSizedBox(horizontalSpace: 15.sp),
                                 CustomText(
-                                  text: userData!.username!,
-                                  fontSize: 23.sp,
+                                  text: "Edit Profile",
+                                  fontSize: 27.sp,
                                   color: blackColor,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                                CustomText(
-                                  text: userData!.email!,
-                                  fontSize: 16.sp,
-                                  color: blackColor.withOpacity(0.6),
-                                  fontWeight: FontWeight.w400,
-                                )
                               ],
                             ),
+                            VerticalSizedBox(vertical: 10.h),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                HorizontalSizedBox(horizontalSpace: 20.w),
+                                if (userData!.picUrl == "")
+                                  image == null
+                                      ? GestureDetector(
+                                          onTap: () {
+                                            getImage();
+                                          },
+                                          child: Image.asset(
+                                            profil2,
+                                            width: 100.w,
+                                            height: 100.h,
+                                          ),
+                                        )
+                                      : GestureDetector(
+                                          onTap: () {
+                                            getImage();
+                                          },
+                                          child: Container(
+                                            height: 100.h,
+                                            width: 100.w,
+                                            decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: ClipOval(
+                                              child: Image.file(
+                                                image!,
+                                                fit: BoxFit.fill,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                if (userData!.picUrl != "")
+                                  Container(
+                                    width: 110.w,
+                                    height: 110.h,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                              userData!.picUrl!,
+                                            ))),
+                                  ),
+                                HorizontalSizedBox(horizontalSpace: 10.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    VerticalSizedBox(vertical: 12.h),
+                                    CustomText(
+                                      text: userData!.username!,
+                                      fontSize: 23.sp,
+                                      color: blackColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    CustomText(
+                                      text: userData!.email!,
+                                      fontSize: 16.sp,
+                                      color: blackColor.withOpacity(0.6),
+                                      fontWeight: FontWeight.w400,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            VerticalSizedBox(vertical: 20.h),
+                            // textfields
+                            EditProfileCustomTextField(
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'Kindly enter a valid username';
+                                }
+
+                                return null;
+                              },
+                              controller: editProfileProvider.nameController,
+                              scrollarea: 4,
+                              hintText: userData!.username!,
+                              prefixIcon: Icons.person,
+                            ),
+                            VerticalSizedBox(vertical: 30.h),
+                            EditProfileCustomTextField(
+                              validator: (value) {
+                                if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                        .hasMatch(value.toString()) ==
+                                    false) {
+                                  return 'Please enter a valid email address';
+                                }
+                                return null;
+                              },
+                              controller: editProfileProvider.emailController,
+                              scrollarea: 4,
+                              hintText: userData!.email!,
+                              prefixIcon: Icons.email,
+                            ),
+                            VerticalSizedBox(vertical: 30.h),
+                            EditPassowrdWidget(
+                              controller: editProfileProvider.passController,
+                              validator: (value) {
+                                if (value!.length > 8) {
+                                  return 'Password should be atleast 8 characters';
+                                }
+                                return null;
+                              },
+                              hintText: "Type new password",
+                            ),
+                            VerticalSizedBox(vertical: 30.h),
+                            EditPassowrdWidget(
+                              controller:
+                                  editProfileProvider.confirmpassController,
+                              hintText: "Confirm new password",
+                              validator: (value) {
+                                if (editProfileProvider
+                                        .confirmpassController.text !=
+                                    editProfileProvider.passController.text) {
+                                  return 'Passwords donot match';
+                                }
+                                return null;
+                              },
+                            ),
+                            VerticalSizedBox(vertical: 50.h),
+                            InkWell(
+                                onTap: editProfileProvider.isLoading
+                                    ? () {}
+                                    : () async {
+                                        await editProfileProvider.editProfile(
+                                            editProfileProvider
+                                                .emailController.text,
+                                            editProfileProvider
+                                                .passController.text,
+                                            editProfileProvider
+                                                .nameController.text);
+                                        setState(() {});
+                                      },
+                                child: editProfileProvider.isLoading
+                                    ? const CircularProgressIndicator()
+                                    : const CustomGradientButton(
+                                        buttonText: "Save")),
+                            VerticalSizedBox(vertical: 20.sp),
                           ],
                         ),
-                        VerticalSizedBox(vertical: 20.h),
-                        // textfields
-                        EditProfileCustomTextField(
-                          validator: (value) {
-                            if (value == null) {
-                              return 'Kindly enter a valid username';
-                            }
-
-                            return null;
-                          },
-                          controller: editProfileProvider.nameController,
-                          scrollarea: 4,
-                          hintText: userData!.username!,
-                          prefixIcon: Icons.person,
-                        ),
-                        VerticalSizedBox(vertical: 30.h),
-                        EditProfileCustomTextField(
-                          validator: (value) {
-                            if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                                    .hasMatch(value.toString()) ==
-                                false) {
-                              return 'Please enter a valid email address';
-                            }
-                            return null;
-                          },
-                          controller: editProfileProvider.emailController,
-                          scrollarea: 4,
-                          hintText: userData!.email!,
-                          prefixIcon: Icons.email,
-                        ),
-                        VerticalSizedBox(vertical: 30.h),
-                        EditPassowrdWidget(
-                          controller: editProfileProvider.passController,
-                          validator: (value) {
-                            if (value!.length > 8) {
-                              return 'Password should be atleast 8 characters';
-                            }
-                            return null;
-                          },
-                          hintText: "Type new password",
-                        ),
-                        VerticalSizedBox(vertical: 30.h),
-                        EditPassowrdWidget(
-                          controller: editProfileProvider.confirmpassController,
-                          hintText: "Confirm new password",
-                          validator: (value) {
-                            if (editProfileProvider
-                                    .confirmpassController.text !=
-                                editProfileProvider.passController.text) {
-                              return 'Passwords donot match';
-                            }
-                            return null;
-                          },
-                        ),
-                        VerticalSizedBox(vertical: 50.h),
-                        InkWell(
-                            onTap: editProfileProvider.isLoading
-                                ? () {}
-                                : () async {
-                                    await editProfileProvider.editProfile(
-                                        editProfileProvider
-                                            .emailController.text,
-                                        editProfileProvider.passController.text,
-                                        editProfileProvider
-                                            .nameController.text);
-                                    setState(() {});
-                                  },
-                            child: editProfileProvider.isLoading
-                                ? const CircularProgressIndicator()
-                                : const CustomGradientButton(
-                                    buttonText: "Save"))
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  CusotmAppBar(color: whiteColor, from: AppConstants.fromeidt),
+                ],
               ),
             ),
           )

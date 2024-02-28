@@ -1,0 +1,26 @@
+dependencies: \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/model/snapshot_version.cc \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/model/snapshot_version.h \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/include/firebase/firestore/timestamp.h \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/util/comparison.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/meta/type_traits.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/config.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/options.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/policy_checks.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/strings/string_view.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/attributes.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/internal/throw_delegate.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/macros.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/optimization.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/port.h \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/util/hashing.h \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/objc/objc_type_traits.h \
+  /Volumes/subhan/Literature-Ai/ios/Pods/FirebaseFirestoreInternal/Firestore/core/src/util/type_traits.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/types/optional.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/utility/utility.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/internal/inline_variable.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/internal/identity.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/base/internal/invoke.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/types/bad_optional_access.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/types/internal/optional.h \
+  /Volumes/subhan/Literature-Ai/build/ios/Debug-iphonesimulator/abseil/absl.framework/Headers/memory/memory.h

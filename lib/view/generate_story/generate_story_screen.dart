@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:mvvm/Core/Components/custom_app_bar2.dart';
 import 'package:mvvm/Core/Components/helper_components.dart';
 import 'package:mvvm/Core/Components/text_widget.dart';
 import 'package:mvvm/Core/constant/assets.dart';
@@ -124,8 +125,8 @@ import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 
 class GenerateStoryScreen extends StatefulWidget {
-  String? preresponse;
-  GenerateStoryScreen({super.key,  this.preresponse});
+  String preresponse;
+  GenerateStoryScreen({super.key, required this.preresponse});
 
   @override
   State<GenerateStoryScreen> createState() => _GenerateStoryScreenState();
@@ -151,16 +152,15 @@ class _GenerateStoryScreenState extends State<GenerateStoryScreen> {
   List<ChatMessage> _messages = <ChatMessage>[];
   List<ChatUser> _typingUsers = <ChatUser>[];
 
-
   @override
   void initState() {
     if (widget.preresponse != "") {
-        ChatMessage message = ChatMessage(
-      user: ChatUser(
-        id: '1',
-      ),
-      createdAt: DateTime.now(),
-      text:widget.preresponse!);
+      ChatMessage message = ChatMessage(
+          user: ChatUser(
+            id: '1',
+          ),
+          createdAt: DateTime.now(),
+          text: widget.preresponse!);
       getChatResponse(message).then((value) {
         setState(() {});
       });
@@ -174,21 +174,12 @@ class _GenerateStoryScreenState extends State<GenerateStoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.white,
-          leading: GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: const Icon(
-              Icons.arrow_back_ios,
-            ),
-          ),
-          title: CustomText(
-            text: "LITERATURE.AI",
-            fontSize: 16.sp,
-            color: blackColor,
-            fontWeight: FontWeight.w400,
-          )),
+        automaticallyImplyLeading: false,
+        title: CusotmAppBar2(
+          text: "LITERATURE.AI",
+          color: whiteColor,
+        ),
+      ),
       body: Stack(
         children: [
           DashChat(
@@ -204,34 +195,32 @@ class _GenerateStoryScreenState extends State<GenerateStoryScreen> {
                         gapPadding: 2,
                         borderRadius: BorderRadius.all(Radius.circular(6)))),
               ),
-              messageOptions:  MessageOptions(
+              messageOptions: MessageOptions(
                 onPressMessage: (m) async {
-                  await Clipboard.setData( ClipboardData(text: m.text));
-                    Fluttertoast.showToast(
-            msg: "Response copied to clipboard",
-            // toastLength: Toast
-            //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
-            gravity: ToastGravity.BOTTOM, // Top, Center, Bottom
-            timeInSecForIosWeb: 1, // Time duration for iOS and web
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-
+                  await Clipboard.setData(ClipboardData(text: m.text));
+                  Fluttertoast.showToast(
+                    msg: "Response copied to clipboard",
+                    // toastLength: Toast
+                    //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
+                    gravity: ToastGravity.BOTTOM, // Top, Center, Bottom
+                    timeInSecForIosWeb: 1, // Time duration for iOS and web
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
                 onLongPressMessage: (m) async {
-                  await Clipboard.setData( ClipboardData(text: m.text));
-                    Fluttertoast.showToast(
-            msg: "Response copied to clipboard",
-            // toastLength: Toast
-            //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
-            gravity: ToastGravity.BOTTOM, // Top, Center, Bottom
-            timeInSecForIosWeb: 1, // Time duration for iOS and web
-            backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0,
-          );
-
+                  await Clipboard.setData(ClipboardData(text: m.text));
+                  Fluttertoast.showToast(
+                    msg: "Response copied to clipboard",
+                    // toastLength: Toast
+                    //     .LENGTH_SHORT, // or Toast.LENGTH_LONG
+                    gravity: ToastGravity.BOTTOM, // Top, Center, Bottom
+                    timeInSecForIosWeb: 1, // Time duration for iOS and web
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0,
+                  );
                 },
                 showCurrentUserAvatar: false,
                 showOtherUsersAvatar: false,

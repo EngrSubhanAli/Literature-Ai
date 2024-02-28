@@ -13,6 +13,7 @@ import 'package:mvvm/Core/constant/assets.dart';
 import 'package:mvvm/Core/constant/colors.dart';
 import 'package:mvvm/utils/routes/routes_name.dart';
 import 'package:mvvm/view/bottom_navigation/bottom_navigation_bar.dart';
+import 'package:mvvm/view/home_screen/home_screen_view_model.dart';
 import 'package:mvvm/view/user_side_screens/auth/user_sign_in_screen/sign_in_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,7 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final loginProvider = Provider.of<LogInViewModel>(context);
+    final homeProvider = Provider.of<HomeScreenViewModel>(context);
     return SafeArea(
       child: Scaffold(
           body: SingleChildScrollView(
@@ -77,6 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         "Enter your information below or continue with  account",
                     textAlign: TextAlign.center,
                     fontSize: 14.sp,
+                    maxLines: 20,
                     color: greyColor,
                     fontWeight: FontWeight.w400,
                   ),
@@ -140,6 +143,9 @@ class _SignInScreenState extends State<SignInScreen> {
                     onTap: loginProvider.isLoading
                         ? () {}
                         : () async {
+                            homeProvider.currentIndexCondition(0);
+                            homeProvider.toggleCondition(true);
+                            print(homeProvider.currentIndex);
                             if (formKey.currentState!.validate()) {
                               formKey.currentState!.save();
                               await loginProvider.loginUser().then((value) {

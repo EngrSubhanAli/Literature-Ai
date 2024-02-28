@@ -155,6 +155,7 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                 child: CustomText(
                   text: "Skip",
                   fontSize: 13.sp,
+                  maxLines: 20,
                   color: blackColor,
                   fontWeight: FontWeight.bold,
                 ),
@@ -221,6 +222,7 @@ class OnboardComponent extends StatelessWidget {
           child: CustomText(
             textAlign: TextAlign.center,
             text: descriptiom,
+            maxLines: 20,
             fontSize: 16.sp,
             color: blackColor,
             fontWeight: FontWeight.bold,

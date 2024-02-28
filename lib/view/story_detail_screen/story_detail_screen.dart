@@ -97,7 +97,19 @@ class _StoryDetailScreenState extends State<StoryDetailScreen> {
                 ),
                 const VerticalSizedBox(vertical: 10),
                 CustomText(
-                  text:widget.rank==0? "First Ranked Story":widget.rank==1? "Second Ranked Story":widget.rank==2? "Third Ranked Story":widget.rank==3? "Fourth Ranked Story":widget.rank==4? "Fifth Ranked Story":widget.rank==5? "Sixth Ranked Story":"Seventh Ranked Story",
+                  text: widget.rank == 0
+                      ? "First Ranked Story"
+                      : widget.rank == 1
+                          ? "Second Ranked Story"
+                          : widget.rank == 2
+                              ? "Third Ranked Story"
+                              : widget.rank == 3
+                                  ? "Fourth Ranked Story"
+                                  : widget.rank == 4
+                                      ? "Fifth Ranked Story"
+                                      : widget.rank == 5
+                                          ? "Sixth Ranked Story"
+                                          : "Seventh Ranked Story",
                   fontSize: 23.sp,
                   color: blackColor,
                   fontWeight: FontWeight.bold,
@@ -146,32 +158,31 @@ class _StoryDetailScreenState extends State<StoryDetailScreen> {
                 VerticalSizedBox(vertical: 15.h),
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: CustomText(
-                      text: widget.snapshot["storyTittle"],
-                      fontSize: 18.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.w700,
-                    ),
+                  child: CustomText(
+                    customAlignment: Alignment.centerLeft,
+                    text: widget.snapshot["storyTittle"],
+                    fontSize: 18.sp,
+                    maxLines: 50,
+                    color: blackColor,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
                 VerticalSizedBox(vertical: 10.h),
                 Padding(
-                  padding: const EdgeInsets.only(left: 18.0),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: CustomText(
-                      text: widget.snapshot["storyBody"],
-                      fontSize: 15.sp,
-                      color: blackColor,
-                      fontWeight: FontWeight.w300,
-                    ),
+                  padding: EdgeInsets.only(left: 18.sp, right: 18.sp),
+                  child: CustomText(
+                    customAlignment: Alignment.centerLeft,
+                    text: widget.snapshot["storyBody"],
+                    fontSize: 15.sp,
+                    maxLines: 50,
+                    color: blackColor,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
                 SizedBox(height: 14.h),
                 Row(
                   children: [
+                    HorizontalSizedBox(horizontalSpace: 20.sp),
                     InkWell(
                       onTap: () {
                         homeprovider.toggleLike(

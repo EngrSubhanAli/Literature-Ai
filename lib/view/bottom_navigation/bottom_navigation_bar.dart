@@ -15,7 +15,7 @@ import 'package:mvvm/view/home_screen/home_screen.dart';
 import 'package:mvvm/view/recommend_screen/recommend_screen.dart';
 import 'package:provider/provider.dart';
 
-int currentIndex = 0;
+// int currentIndex = 0;
 
 // ignore: must_be_immutable
 class AppMainScreen extends StatefulWidget {
@@ -25,7 +25,9 @@ class AppMainScreen extends StatefulWidget {
     const HomeScreen(),
     const EditProfileScreen(),
     const AnalyzeScreen(),
-     GenerateStoryScreen(),
+    GenerateStoryScreen(
+      preresponse: "",
+    ),
     const RecommendScreen(),
   ];
   @override
@@ -35,7 +37,8 @@ class AppMainScreen extends StatefulWidget {
 class _AppMainScreenState extends State<AppMainScreen> {
   @override
   Widget build(BuildContext context) {
-    final homeprovider = Provider.of<HomeScreenViewModel>(context, listen: true);
+    final homeprovider =
+        Provider.of<HomeScreenViewModel>(context, listen: true);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -72,7 +75,9 @@ class _AppMainScreenState extends State<AppMainScreen> {
             InkWell(
               onTap: () {
                 // Navigator.pushNamed(context, RoutesName.generatestory);
-                Get.to(GenerateStoryScreen(preresponse: '',));
+                Get.to(GenerateStoryScreen(
+                  preresponse: '',
+                ));
               },
               child: Image.asset(
                 g,
@@ -117,7 +122,8 @@ class _AppMainScreenState extends State<AppMainScreen> {
                     color: blackColor,
                     fontWeight: FontWeight.w800,
                   ),
-                  currentIndex == 0 && homeprovider.condition != false
+                  homeprovider.currentIndex == 0 &&
+                          homeprovider.condition != false
                       ? Container(
                           height: 8.h,
                           width: 8.w,
@@ -132,7 +138,7 @@ class _AppMainScreenState extends State<AppMainScreen> {
               ),
               onPressed: () {
                 setState(() {
-                  currentIndex = 0;
+                  homeprovider.currentIndexCondition(0);
                   setState(() {});
                   homeprovider.toggleCondition(true);
                 });
@@ -155,7 +161,8 @@ class _AppMainScreenState extends State<AppMainScreen> {
                     color: blackColor,
                     fontWeight: FontWeight.bold,
                   ),
-                  currentIndex == 1 && homeprovider.condition != false
+                  homeprovider.currentIndex == 1 &&
+                          homeprovider.condition != false
                       ? Container(
                           height: 8.h,
                           width: 8.w,
@@ -168,15 +175,15 @@ class _AppMainScreenState extends State<AppMainScreen> {
                 ],
               ),
               onPressed: () {
-                setState(() {
-                  currentIndex = 1;
-                });
+                homeprovider.currentIndexCondition(1);
+                homeprovider.toggleCondition(true);
+                print(homeprovider.currentIndex);
               },
             ),
           ],
         ),
       ),
-      body: widget.screens[currentIndex],
+      body: widget.screens[homeprovider.currentIndex],
     );
   }
 }

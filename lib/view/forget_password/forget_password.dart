@@ -25,7 +25,7 @@ class ForgetPassword extends StatefulWidget {
 
 class _ForgetPasswordState extends State<ForgetPassword> {
   bool? platform;
-  final formKey=GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   @override
   void initState() {
     platform = Platform.isAndroid;
@@ -36,10 +36,9 @@ class _ForgetPasswordState extends State<ForgetPassword> {
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-      final forgetPasswordProvider =
+    final forgetPasswordProvider =
         Provider.of<ForgetPasswordViewModel>(context);
     return SafeArea(
       child: Scaffold(
@@ -50,8 +49,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             height: 1.sh,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image:
-                    AssetImage(background), // Replace with your image asset path
+                image: AssetImage(
+                    background), // Replace with your image asset path
                 fit: BoxFit.cover,
               ),
             ),
@@ -89,13 +88,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     TextFieldContainer(
                       title: "Email",
                       validator: (value) {
-          if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
-                  .hasMatch(value.toString()) ==
-              false) {
-            return 'Please enter a valid email address';
-          }
-          return null;
-                },
+                        if (RegExp(r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+                                .hasMatch(value.toString()) ==
+                            false) {
+                          return 'Please enter a valid email address';
+                        }
+                        return null;
+                      },
                       placeholder: "Enter your email",
                       textController: forgetPasswordProvider.emailController,
                       suffixicon: const SizedBox(),
@@ -104,12 +103,16 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                     ),
                     VerticalSizedBox(vertical: 100.h),
                     GestureDetector(
-                      onTap:forgetPasswordProvider.isLoading?(){}: () {
-                        _sendCode(forgetPasswordProvider);
-                  
-                        // Get.to(const ForgetSuccess());
-                      },
-                      child:forgetPasswordProvider.isLoading?const CircularProgressIndicator(): const CustomGradientButton(buttonText: "Continue"),
+                      onTap: forgetPasswordProvider.isLoading
+                          ? () {}
+                          : () {
+                              _sendCode(forgetPasswordProvider);
+
+                              // Get.to(const ForgetSuccess());
+                            },
+                      child: forgetPasswordProvider.isLoading
+                          ? const CircularProgressIndicator()
+                          : const CustomGradientButton(buttonText: "Continue"),
                     ),
                   ],
                 ),
@@ -120,12 +123,13 @@ class _ForgetPasswordState extends State<ForgetPassword> {
       )),
     );
   }
+
   Future<void> _sendCode(ForgetPasswordViewModel forgetpasswordProvider) async {
     if (formKey.currentState!.validate()) {
       formKey.currentState!.save();
       await forgetpasswordProvider.sendForgetPasswordLink().then((value) {
         if (value != "Sucess") {
-          print("Hiiiiiii22"+value.toString());
+          print("Hiiiiiii22" + value.toString());
           Fluttertoast.showToast(
             msg: value,
             // toastLength: Toast
@@ -137,11 +141,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
             fontSize: 16.0,
           );
         } else {
-                  print("Hiiiiiii11"+value.toString());
+          print("Hiiiiiii11" + value.toString());
           Get.to(const ForgetSuccess());
-          
-
-     
         }
       });
     }

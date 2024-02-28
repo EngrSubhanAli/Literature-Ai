@@ -23,8 +23,6 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkOnboardingStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-
-
     setState(() {
       _isOnboardingShown = prefs.getBool('onboardingShown') ?? false;
     });
@@ -34,22 +32,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-      _checkOnboardingStatus();
+    _checkOnboardingStatus();
 
-    
-    
-
-
-
-   Timer(const Duration(seconds: 1), () async {
+    Timer(const Duration(seconds: 1), () async {
       SplashScreenViewModel().isUserLoggedIn(_isOnboardingShown);
     });
-
-
-     
-
-    
-
   }
 
   @override
@@ -67,8 +54,11 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               VerticalSizedBox(vertical: 150.h),
+              Spacer(),
               Image.asset(
                 logo,
                 width: 170.w,
@@ -76,6 +66,8 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               VerticalSizedBox(vertical: 20.h),
               CustomText(
+                width: 0.8.sw,
+                maxLines: 2,
                 text: "Welcome To LITERATURE.AI",
                 textAlign: TextAlign.center,
                 color: blackColor,
@@ -83,36 +75,23 @@ class _SplashScreenState extends State<SplashScreen> {
                 fontWeight: FontWeight.bold,
               ),
               VerticalSizedBox(vertical: 20.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child: CustomText(
-                  text: "Lorem Ipsum is dummy text of the printing"
-                      " and typesetting industry, derived from a Latin "
-                      "passage by Cicero",
-                  textAlign: TextAlign.center,
-                  color: blackColor,
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
               const Spacer(),
-                if(    _isOnboardingShown == false)
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: InkWell(
-                  onTap: () async {
-                
+              if (_isOnboardingShown == false)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: InkWell(
+                    onTap: () async {
                       Navigator.pushNamed(context, RoutesName.onboarding);
-                  
-                  },
-                  child: Image.asset(
-                    tryliterature,
-                    width: double.infinity,
-                    height: 108.h,
+                    },
+                    child: Image.asset(
+                      tryliterature,
+                      width: double.infinity,
+                      height: 108.h,
+                    ),
                   ),
                 ),
-              ),
               VerticalSizedBox(vertical: 50.h),
+              Spacer(),
             ],
           ),
         ),
